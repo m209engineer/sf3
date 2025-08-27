@@ -1,0 +1,101 @@
+[
+  {
+    "id": 1,
+    "name": "Abduvali ",
+    "username": "abduvali",
+    "password": "48392",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 12, "jarima": 17 }
+    }
+  },
+  {
+    "id": 2,
+    "name": "Elshodbek ",
+    "username": "elshodbek",
+    "password": "75021",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 18, "jarima": 5 }
+    }
+  },
+  {
+    "id": 3,
+    "name": "Ibrohimjon ",
+    "username": "ibrohimjon",
+    "password": "12946",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 20, "jarima": 22 }
+    }
+  },
+  {
+    "id": 4,
+    "name": "Ziyodullo ",
+    "username": "ziyodullo",
+    "password": "67385",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 27, "jarima": 6 }
+    }
+  },
+  {
+    "id": 5,
+    "name": "Elnurbek",
+    "username": "elnurbek",
+    "password": "30417",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 13, "jarima": 20 }
+    }
+  },
+  {
+    "id": 6,
+    "name": "Sanjarbek",
+    "username": "sanjarbek",
+    "password": "89234",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 24, "jarima": 32 }
+    }
+  },
+  {
+    "id": 7,
+    "name": "Behruzbek",
+    "username": "behruzbek",
+    "password": "52678",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 15, "jarima": 12 }
+    }
+  },
+  {
+    "id": 8,
+    "name": "Yahyobek",
+    "username": "yahyobek",
+    "password": "94103",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 3, "jarima": 17 }
+    }
+  },
+  {
+    "id": 9,
+    "name": "Muhammadaziz",
+    "username": "muhammadaziz",
+    "password": "31750",
+    "image": "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+    "level": "OK",
+    "months": {
+      "2025-08": { "davomat": 0, "uy_vazifa": 0, "tasks": 0, "jarima": 0 }
+    }
+  }
+]

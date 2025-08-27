@@ -1,0 +1,56 @@
+<div class="system-container" [class.dark-mode]="isDarkMode">
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav" *ngIf="isMobile">
+    <a 
+      *ngFor="let item of menuItems" 
+      [routerLink]="item.path" 
+      routerLinkActive="active"
+      class="mobile-nav-item"
+      (click)="onMobileNavClick()">
+      <i [class]="item.icon"></i>
+      <span class="nav-label">{{ item.title }}</span>
+    </a>
+
+  </nav>
+
+  <!-- Desktop Sidebar -->
+  <div class="sidebar" [class.sidebar-collapsed]="isCollapsed && !isMobile">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">SF3</div>
+        <h2>XP Tizimi</h2>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a 
+        *ngFor="let item of menuItems" 
+        [routerLink]="item.path" 
+        routerLinkActive="active"
+        class="nav-item">
+        <i [class]="item.icon"></i>
+        <span class="nav-text">{{ item.title }}</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer" *ngIf="currentStudent">
+      <div class="user-info">
+        <img [src]="currentStudent.image" alt="User" class="user-avatar">
+        <div class="user-details">
+          <p class="user-name">{{ currentStudent.name }}</p>
+          <p class="user-role">O'quvchi</p>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Chiqish</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" [class.content-expanded]="isCollapsed && !isMobile">
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

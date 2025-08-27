@@ -1,0 +1,48 @@
+<div class="login-container" [ngClass]="{'dark-mode': isDarkMode}">
+  <div class="login-card">
+    <div class="login-header">
+      <img src="https://abutechuz.vercel.app/images/image-2.png" alt="Logo" class="logo" *ngIf="!isLoading">
+      <div class="spinner" *ngIf="isLoading"></div>
+      <h1>XP Ta'lim Tizimi</h1>
+      <p>O'quvchilar reyting tizimiga xush kelibsiz</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="password">Parol</label>
+        <input 
+          type="password" 
+          id="password" 
+          [(ngModel)]="password" 
+          name="password"
+          (keypress)="onKeyPress($event)"
+          placeholder="Parolingizni kiriting"
+          required
+          [disabled]="isLoading"
+          class="form-control"
+        >
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button 
+        type="submit" 
+        class="login-btn"
+        [disabled]="isLoading || !password"
+      >
+        <span *ngIf="!isLoading">Kirish</span>
+        <span *ngIf="isLoading">Tekshirilmoqda...</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Agar profilingiz yo'q bo'lsa, <a href="https://t.me/t_me_muhammadaziz" target="_blank">administratorga murojaat qiling</a></p>
+    </div>
+
+    <button class="theme-toggle" (click)="toggleTheme()">
+      {{ isDarkMode ? 'Light rejim' : 'Dark rejim' }}
+    </button>
+  </div>
+</div>

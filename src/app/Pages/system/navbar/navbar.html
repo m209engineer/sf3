@@ -1,0 +1,10 @@
+<nav class="navbar" [class.collapsed]="isCollapsed && !isMobile">
+  <div class="nav-logo">
+    <img class="logo-icon" src="https://abutechuz.vercel.app/images/image-2.png" alt="Logo">
+    <span class="logo-text">{{ dynamicTitle }}</span>
+  </div>
+  
+  <button class="theme-toggle" (click)="toggleTheme()" [class.active]="isDarkMode" aria-label="Toggle Theme">
+    <i [class]="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
+  </button>
+</nav>

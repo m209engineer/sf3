@@ -1,0 +1,254 @@
+$primary-color: #312e81;
+$secondary-color: #6b7280;
+$accent-color: #F3F4F6;
+$background-light: #f9fafb;
+$background-dark: #1f2937;
+$text-light: #1f2937;
+$text-dark: #d1d5db;
+$sidebar-width: 260px;
+$sidebar-collapsed-width: 64px;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: $sidebar-width;
+  right: 0;
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 900;
+  transition: all 0.3s ease;
+
+  &.collapsed {
+    left: $sidebar-collapsed-width;
+  }
+
+  // Dark mode styles
+  :host-context(.dark-mode) & {
+    background: darken($background-dark, 4%);
+    border-bottom: 1px solid lighten($background-dark, 8%);
+    color: $text-dark;
+    
+    .nav-logo {
+      .logo-icon {
+        filter: brightness(1.2); // Dark rejimda rasmning ko'rinishini yaxshilash
+      }
+      
+      .logo-text {
+        color: $text-dark;
+      }
+    }
+    
+    .theme-toggle {
+      color: $text-dark;
+      
+      &:hover {
+        background: lighten($background-dark, 10%);
+        color: $accent-color;
+      }
+      
+      &.active {
+        color: $accent-color;
+        
+        &:hover {
+          background: lighten($background-dark, 15%);
+        }
+      }
+    }
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .logo-icon {
+      width: 32px; // Logo o'lchami matn bilan muvozanatli bo'lishi uchun
+      height: 32px;
+      object-fit: contain;
+      transition: filter 0.3s ease;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-light;
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+  }
+
+  .theme-toggle {
+    background: none;
+    border: none;
+    color: $text-light;
+    font-size: 1.4rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    position: relative;
+
+    &:hover {
+      background: lighten($primary-color, 48%);
+      color: $primary-color;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &.active {
+      color: $accent-color;
+      
+      &:hover {
+        background: lighten($accent-color, 40%);
+      }
+    }
+
+    i {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover i {
+      transform: scale(1.1);
+    }
+  }
+
+  // Tablet responsive design
+  @media (min-width: 768px) and (max-width: 1023px) {
+    left: 240px;
+    padding: 0 1.5rem;
+    
+    &.collapsed {
+      left: 60px;
+    }
+    
+    .nav-logo {
+      .logo-icon {
+        width: 45px;
+        height: 45px;
+      }
+      
+      .logo-text {
+        font-size: 1.15rem;
+      }
+    }
+    
+    .theme-toggle {
+      font-size: 1.3rem;
+      width: 46px;
+      height: 46px;
+    }
+  }
+
+  // Mobile responsive design
+  @media (max-width: 767px) {
+    left: 0 !important;
+    height: 60px;
+    padding: 0 1rem;
+    
+    .nav-logo {
+      .logo-icon {
+        width: 24px;
+        height: 24px;
+      }
+      
+      .logo-text {
+        font-size: 1.1rem;
+      }
+    }
+    
+    .theme-toggle {
+      font-size: 1.2rem;
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  // Small mobile devices
+  @media (max-width: 375px) {
+    padding: 0 0.75rem;
+    
+    .nav-logo {
+      .logo-icon {
+        width: 300px;
+        height: 30px;
+      }
+      
+      .logo-text {
+        font-size: 1rem;
+      }
+    }
+    
+    .theme-toggle {
+      font-size: 1.1rem;
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  // Large screens
+  @media (min-width: 1440px) {
+    padding: 0 3rem;
+    
+    .nav-logo {
+      .logo-icon {
+        width: 45px;
+        height: 45px;
+      }
+      
+      .logo-text {
+        font-size: 1.4rem;
+      }
+    }
+    
+    .theme-toggle {
+      font-size: 1.5rem;
+      width: 54px;
+      height: 54px;
+    }
+  }
+
+  // Print styles
+  @media print {
+    display: none !important;
+  }
+
+  // High contrast mode support
+  @media (prefers-contrast: high) {
+    border-bottom: 2px solid #000000;
+    
+    :host-context(.dark-mode) & {
+      border-bottom: 2px solid #ffffff;
+    }
+    
+    .theme-toggle {
+      border: 1px solid currentColor;
+    }
+  }
+
+  // Reduced motion support
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    
+    .theme-toggle {
+      transition: none;
+      
+      i {
+        transition: none;
+      }
+    }
+  }
+}
