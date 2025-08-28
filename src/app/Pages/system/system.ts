@@ -40,8 +40,10 @@ export class System implements OnInit {
   menuItems: MenuItem[] = [
     // { title: 'Bosh Sahifa', path: '/system/home', icon: 'fas fa-home' },
     { title: 'Reyting', path: '/system/rating', icon: 'fas fa-chart-line' },
+
     // { title: 'Profil', path: '/system/profile', icon: 'fas fa-user' },
     // Yangi menyu elementi
+
   ];
 
   constructor(private router: Router) {}
@@ -49,6 +51,7 @@ export class System implements OnInit {
   ngOnInit() {
     this.checkScreenSize();
     this.loadStudentData();
+    // heloooo
     this.loadThemePreference();
     this.applyTheme();
     this.calculateTotalJarima(); // Yangi funksiya
