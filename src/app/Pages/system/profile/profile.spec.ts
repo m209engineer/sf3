@@ -6,6 +6,7 @@ describe('Profile', () => {
   let component: Profile;
   let fixture: ComponentFixture<Profile>;
 
+  
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [Profile]
