@@ -1,6 +1,5 @@
 $primary-color: #312e81;
 $secondary-color: #6b7280;
-// $accent-color: #6ee7b7;
 $accent-color: #F9FAFB;
 
 $background-light: #f9fafb;
@@ -27,6 +26,7 @@ $sidebar-collapsed-width: 64px;
   padding-bottom: 5rem;
   box-sizing: border-box;
   margin: 0;
+  position: relative;
 
   &.dark-mode {
     background-color: $background-dark;
@@ -225,9 +225,9 @@ $sidebar-collapsed-width: 64px;
 .student-col {
   min-width: calc(15vw + 80px);
 }
-.stat-col1{
-  // font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  // font-size: 20px;
+
+.stat-col1 {
+  font-weight: bold;
 }
 
 .stat-col {
@@ -305,19 +305,23 @@ $sidebar-collapsed-width: 64px;
   color: $text-light;
 }
 
-.level-badge {
-  display: inline-block;
-  padding: 0.2rem 0.3rem;
-  border-radius: 3px;
-  background-color: rgba($primary-color, 0.1);
-  color: $primary-color;
-  font-size: calc(0.6rem + 0.2vw);
-  font-weight: 500;
+.level-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
-.dark-mode .level-badge {
-  background-color: rgba($accent-color, 0.15);
-  color: $accent-color;
+.level-image {
+  width: calc(2rem + 1vw);
+  height: calc(2rem + 1vw);
+  object-fit: contain;
+  border-radius: 6px;
 }
 
 .icon-wrapper {
@@ -382,6 +386,105 @@ $sidebar-collapsed-width: 64px;
   }
 }
 
+// Animatsiya stillari
+.level-animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease;
+}
+
+.level-animation-content {
+  position: relative;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: zoomIn 0.5s ease;
+
+  .dark-mode & {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  }
+}
+
+.animated-level-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  animation: bounce 2s infinite;
+}
+
+.animated-student-name {
+  font-size: 2rem;
+  color: white;
+  margin: 0.5rem 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: slideInFromTop 1s ease;
+}
+
+.animated-level-name {
+  font-size: 1.5rem;
+  color: #fbbf24;
+  margin: 0;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  animation: slideInFromBottom 1s ease;
+}
+
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, #ffd700 20%, transparent 70%);
+  border-radius: 50%;
+  animation: particleFloat linear infinite;
+
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+}
+
+// Animatsiya keyframes
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-20px); }
+  60% { transform: translateY(-10px); }
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInFromBottom {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+// Media querielar
 @media (max-width: 767px) {
   .rating-container {
     width: 100%;
@@ -458,6 +561,11 @@ $sidebar-collapsed-width: 64px;
     font-size: calc(0.5rem + 0.1vw);
   }
 
+  .level-image {
+    width: calc(1.5rem + 0.8vw);
+    height: calc(1.5rem + 0.8vw);
+  }
+
   .icon-wrapper {
     width: calc(0.7rem + 0.3vw);
     margin-right: 0.1rem;
@@ -482,6 +590,20 @@ $sidebar-collapsed-width: 64px;
       padding: 0.15rem 0.4rem;
       font-size: calc(0.5rem + 0.1vw);
     }
+  }
+
+  // Mobile animatsiya
+  .animated-level-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .animated-student-name {
+    font-size: 1.5rem;
+  }
+
+  .animated-level-name {
+    font-size: 1.2rem;
   }
 }
 
@@ -562,7 +684,7 @@ $sidebar-collapsed-width: 64px;
     border: 1px solid $border-light;
 
     img {
-      border: 1px solid #ef4444; /* Red border as specified */
+      border: 1px solid #ef4444;
       margin-right: 0;
       width: calc(1.2rem + 0.8vw);
       height: calc(1.2rem + 0.8vw);
@@ -571,84 +693,5 @@ $sidebar-collapsed-width: 64px;
 
   .dark-mode .student-col {
     border: 1px solid $border-dark;
-  }
-
-  .stat-col {
-    width: calc(3vw + 10px);
-    padding: 0.1rem 0.05rem;
-    
-    text-align: center;
-  }
-    .stat-col1 {
-    width: calc(3vw + 10px);
-    padding: 0.1rem 0.05rem;
-    font-size: 5.5px;
-    text-align: center;
-  }
-
-  .total-col {
-    width: calc(3vw + 10px);
-    padding: 0.1rem 0.05rem;
-    text-align: center;
-  }
-
-  .level-col {
-    width: calc(3vw + 10px);
-    padding: 0.1rem 0.05rem;
-    text-align: center;
-  }
-
-  .student-name {
-    font-size: calc(0.55rem + 0.1vw);
-    font-weight: bolder;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    max-width: calc(10vw + 50px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .rank-badge {
-    min-width: calc(0vw + 0px);
-    width: calc(0.9rem + 0.5vw);
-    height: calc(0.9rem + 0.5vw);
-    line-height: calc(0.9rem + 0.5vw);
-    font-size: calc(0.45rem + 0.08vw);
-    padding: 0.05rem 0.01rem;
-    border-radius: 50%;
-  }
-
-  .level-badge {
-    width: calc(0.9rem + 0.5vw);
-    height: calc(0.9rem + 0.5vw);
-    line-height: calc(0.9rem + 0.5vw);
-    font-size: calc(0.45rem + 0.08vw);
-    padding: 0.1rem 0.2rem;
-  }
-
-  .icon-wrapper {
-    width: calc(0.7rem + 0.3vw);
-    margin-right: 0.1rem;
-
-    i {
-      font-size: calc(0.5rem + 0.1vw);
-    }
-  }
-
-  .xp-value {
-    font-size: calc(0.45rem + 0.08vw);
-  }
-
-  .month-title {
-    font-size: calc(0.5rem + 0.08vw);
-    padding: 0.3rem 0.4rem;
-
-    .reset-button {
-      padding: 0.1rem 0.3rem;
-      font-size: calc(0.45rem + 0.08vw);
-    }
-  }
-
-  th, td {
-    padding: 0.3rem 0.15rem;
   }
 }

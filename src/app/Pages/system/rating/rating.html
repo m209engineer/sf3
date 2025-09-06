@@ -72,10 +72,31 @@
             </div>
           </td>
           <td class="level-col">
-            <span class="level-badge">{{ item.level }}</span>
+            <div (dblclick)="onLevelDoubleClick(item.student, item.totalXP)" class="level-image-container">
+              <img [src]="getLevelImage(item.level)" [alt]="item.level" class="level-image" [title]="item.level">
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Animatsiya qismi -->
+  <div *ngIf="showAnimation" class="level-animation-overlay">
+    <div class="level-animation-content">
+      <img [src]="getLevelImage(animationLevel)" [alt]="animationLevel" class="animated-level-image">
+      <h3 class="animated-student-name">{{ animationStudent?.name }}</h3>
+      <h4 class="animated-level-name">{{ animationLevel }}</h4>
+      
+      <!-- Zarlar -->
+      <div *ngFor="let particle of animationParticles" class="particle"
+           [style.left]="particle.x + 'vw'"
+           [style.top]="particle.y + 'vh'"
+           [style.width]="particle.size + 'px'"
+           [style.height]="particle.size + 'px'"
+           [style.animationDuration]="particle.duration + 's'"
+           [style.animationDelay]="particle.delay + 's'">
+      </div>
+    </div>
   </div>
 </div>

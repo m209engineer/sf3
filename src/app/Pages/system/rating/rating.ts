@@ -42,6 +42,30 @@ export class Rating implements OnInit {
   isDarkMode: boolean = false;
   isMobile: boolean = window.innerWidth <= 767;
 
+  // Animatsiya uchun o'zgaruvchilar
+  showAnimation = false;
+  animationStudent: Student | null = null;
+  animationLevel: string = '';
+  animationParticles: any[] = [];
+
+  // Darajalar va ularning XP chegaralari
+  levels = [
+    { name: 'Beginner', xp: 0 },
+    { name: 'Novice', xp: 10 },
+    { name: 'Adept', xp: 20 },
+    { name: 'Junior', xp: 40 },
+    { name: 'Intermediate', xp: 60 },
+    { name: 'Senior', xp: 90 },
+    { name: 'Advanced', xp: 120 },
+    { name: 'Professional', xp: 160 },
+    { name: 'Elite', xp: 200 },
+    { name: 'Expert', xp: 250 },
+    { name: 'Guru', xp: 300 },
+    { name: 'Master', xp: 360 },
+    { name: 'GrandMaster', xp: 430 },
+    { name: 'Legend', xp: 500 }
+  ];
+
   sortOptions = [
     { value: 'total', label: 'Umumiy' },
     { value: 'davomat', label: 'Davomat' },
@@ -167,11 +191,14 @@ export class Rating implements OnInit {
           return sum + (month.davomat + month.uy_vazifa + month.tasks - (month.jarima || 0));
         }, 0);
       }
+      
+      const levelName = this.getLevelName(totalXP);
+      
       return {
         student,
         totalXP,
         rank: 0,
-        level: student.level
+        level: levelName
       };
     });
     this.sortRanking();
@@ -227,6 +254,57 @@ export class Rating implements OnInit {
         default: return sum;
       }
     }, 0);
+  }
+
+  // XP ga qarab daraja nomini topish
+  getLevelName(xp: number): string {
+    if (xp < 0) return 'Maymuncha';
+    
+    for (let i = this.levels.length - 1; i >= 0; i--) {
+      if (xp >= this.levels[i].xp) {
+        return this.levels[i].name;
+      }
+    }
+    
+    return 'Beginner';
+  }
+
+  // Daraja logosini olish
+  getLevelImage(levelName: string): string {
+    return `/${levelName}.png`;
+  }
+
+  // Logoga double click bosilganda
+  onLevelDoubleClick(student: Student, totalXP: number) {
+    const levelName = this.getLevelName(totalXP);
+    
+    this.animationStudent = student;
+    this.animationLevel = levelName;
+    this.showAnimation = true;
+    
+    // Zarlar yaratish
+    this.createParticles();
+    
+    // 3 soniyadan keyin animatsiyani yopish
+    setTimeout(() => {
+      this.showAnimation = false;
+      this.animationStudent = null;
+      this.animationParticles = [];
+    }, 3000);
+  }
+
+  // Zarlar yaratish
+  createParticles() {
+    this.animationParticles = [];
+    for (let i = 0; i < 50; i++) {
+      this.animationParticles.push({
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 10 + 5,
+        duration: Math.random() * 2 + 1,
+        delay: Math.random() * 1
+      });
+    }
   }
 
   onSortChange(sortType: string) {
