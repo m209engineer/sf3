@@ -52,9 +52,9 @@ export class Rating implements OnInit {
   levels = [
     { name: 'Beginner', xp: 0 },
     { name: 'Novice', xp: 10 },
-    { name: 'Adept', xp: 20 },
-    { name: 'Junior', xp: 40 },
-    { name: 'Intermediate', xp: 60 },
+    { name: 'Junior', xp: 20 },
+    { name: 'Intermediate', xp: 40 },
+    { name: 'Adept', xp: 60 },
     { name: 'Senior', xp: 90 },
     { name: 'Advanced', xp: 120 },
     { name: 'Professional', xp: 160 },
