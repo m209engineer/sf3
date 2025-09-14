@@ -1,0 +1,289 @@
+// O'zgaruvchilar
+$primary-color: #312e81;
+$secondary-color: #6b7280;
+$accent-color: #F9FAFB;
+
+$background-light: #f9fafb;
+$background-dark: #1f2937;
+$text-light: #1f2937;
+$text-dark: #d1d5db;
+$card-light: #ffffff;
+$card-dark: #374151;
+$border-light: #e5e7eb;
+$border-dark: #4b5563;
+$header-light: #f3f4f6;
+$header-dark: #111827;
+
+// Asosiy stil
+.student-profile {
+  padding: 20px;
+  background-color: $background-light;
+  color: $text-light;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+
+  &.dark-mode {
+    background-color: $background-dark;
+    color: $text-dark;
+  }
+}
+
+// Profil sarlavhasi
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: $card-light;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  .dark-mode & {
+    background-color: $card-dark;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .profile-info {
+    h1 {
+      margin: 0 0 5px 0;
+      font-size: 24px;
+    }
+
+    .username {
+      margin: 0 0 10px 0;
+      color: $secondary-color;
+      font-size: 16px;
+    }
+
+    .level-badge {
+      display: flex;
+      align-items: center;
+      background-color: $accent-color;
+      padding: 5px 10px;
+      border-radius: 20px;
+      width: fit-content;
+
+      .dark-mode & {
+        background-color: lighten($card-dark, 10%);
+      }
+
+      img {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+      }
+
+      span {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Daraja progress
+.level-progress {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: $card-light;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  .dark-mode & {
+    background-color: $card-dark;
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+
+  .progress-container {
+    .progress-bar {
+      height: 12px;
+      background-color: $border-light;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 10px;
+
+      .dark-mode & {
+        background-color: $border-dark;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background-color: $primary-color;
+        border-radius: 6px;
+        transition: width 0.5s ease;
+      }
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: $secondary-color;
+    }
+  }
+}
+
+// Oy selektori
+.month-selector {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: $card-light;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  .dark-mode & {
+    background-color: $card-dark;
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+
+  select {
+    padding: 10px 15px;
+    border: 1px solid $border-light;
+    border-radius: 6px;
+    background-color: white;
+    color: $text-light;
+    font-size: 16px;
+    width: 100%;
+    max-width: 300px;
+
+    .dark-mode & {
+      background-color: $card-dark;
+      border-color: $border-dark;
+      color: $text-dark;
+    }
+  }
+}
+
+// Statistikalar grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+
+  .stat-card {
+    padding: 20px;
+    background-color: $card-light;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+
+    .dark-mode & {
+      background-color: $card-dark;
+    }
+
+    .stat-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: $primary-color;
+      margin-bottom: 5px;
+    }
+
+    .stat-detail {
+      font-size: 14px;
+      color: $secondary-color;
+    }
+  }
+}
+
+// Ma'lumotlar bo'limi
+.info-section {
+  padding: 20px;
+  background-color: $card-light;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  .dark-mode & {
+    background-color: $card-dark;
+  }
+
+  h2 {
+    margin-top: 0;
+  }
+
+  .evaluation-criteria {
+    margin-top: 20px;
+
+    h3 {
+      margin-bottom: 10px;
+    }
+
+    ul {
+      padding-left: 20px;
+
+      li {
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+// Mobil moslashuvchanlik
+@media (max-width: 768px) {
+  .student-profile {
+    padding: 15px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+
+    .profile-image {
+      margin-right: 0;
+      margin-bottom: 15px;
+    }
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .month-selector select {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-header .profile-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-info h1 {
+    font-size: 20px;
+  }
+}

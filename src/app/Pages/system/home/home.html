@@ -1,2 +1,93 @@
-<app-navbar></app-navbar>
+<div class="student-profile" [class.dark-mode]="isDarkMode">
+  <div class="profile-header">
+    <div class="profile-image">
+      <img [src]="student.image" [alt]="student.name">
+    </div>
+    <div class="profile-info">
+      <h1>{{ student.name }}</h1>
+      <p class="username">@{{ student.username }}</p>
+      <div class="level-badge">
+        <img [src]="'assets/' + student.level + '.png'" [alt]="student.level" onerror="this.src='assets/default-level.png'">
+        <span>{{ student.level }}</span>
+      </div>
+    </div>
+  </div>
 
+  <div class="level-progress">
+    <h2>Daraja Rivoji</h2>
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+      </div>
+      <div class="progress-labels">
+        <span>{{ levels[currentLevelIndex].name }}</span>
+        <span *ngIf="nextLevel">{{ nextLevel.name }}</span>
+        <span *ngIf="!nextLevel">Maksimal Daraja</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="month-selector">
+    <h2>Oy Hisoboti</h2>
+    <select (change)="onMonthChange($event)">
+      <option *ngFor="let month of months" [value]="month" [selected]="month === selectedMonth">
+        {{ month | date: 'MMMM yyyy' }}
+      </option>
+    </select>
+  </div>
+
+  <div class="stats-grid" *ngIf="monthData">
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <h3>Umumiy Ball</h3>
+      <div class="stat-value">{{ totalScore }}</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <h3>Davomat</h3>
+      <div class="stat-value">{{ attendanceScore }}</div>
+      <div class="stat-detail">{{ monthData.davomat }} ta dars</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">🏠</div>
+      <h3>Uy Vazifa</h3>
+      <div class="stat-value">{{ homeworkScore }}</div>
+      <div class="stat-detail">{{ monthData.uy_vazifa }} ta topshiriq</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <h3>Topshiriqlar</h3>
+      <div class="stat-value">{{ tasksScore }}</div>
+      <div class="stat-detail">{{ monthData.tasks }} ball</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">⚠️</div>
+      <h3>Jarima</h3>
+      <div class="stat-value">-{{ penaltyScore }}</div>
+      <div class="stat-detail">{{ monthData.jarima }} ball</div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <h2>Baholash Tizimi</h2>
+    <p>
+      Abutech o'quv markazining Software Engineer 3-guruhi uchun yaratilgan ushbu platformaning asosiy maqsadi — 
+      o'quvchilarning akademik faoliyatini adolatli, shaffof va qulay tarzda baholash hamda kuzatib borishdir.
+    </p>
+    
+    <div class="evaluation-criteria">
+      <h3>Baholash Mezonlari:</h3>
+      <ul>
+        <li><strong>📊 Umumiy</strong> — barcha ko'rsatkichlar yig'indisi</li>
+        <li><strong>👥 Davomat</strong> — darslarda qatnashish faoliyati (har bir dars: 10 ball)</li>
+        <li><strong>🏠 Uy vazifa</strong> — uyga vazifalarni bajarish sifati (har bir topshiriq: 10 ball)</li>
+        <li><strong>✅ Topshiriqlar</strong> — qo'shimcha vazifalar va loyihalarni bajarish (0 dan cheksiz)</li>
+        <li><strong>⚠️ Jarima</strong> — intizomiy qoidabuzarliklar uchun ball kamaytirilishi</li>
+      </ul>
+    </div>
+  </div>
+</div>
