@@ -258,7 +258,13 @@ export class Rating implements OnInit {
 
   // XP ga qarab daraja nomini topish
   getLevelName(xp: number): string {
-    if (xp < 0) return 'Maymuncha';
+    if (xp < 0) {
+      if (xp > -100){
+        return "Maymuncha";
+      } else {
+        return "Yalqov";
+      }
+    }
     
     for (let i = this.levels.length - 1; i >= 0; i--) {
       if (xp >= this.levels[i].xp) {
