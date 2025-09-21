@@ -47,7 +47,7 @@ export class Navbar implements OnInit {
       }
       this.applyTheme();
     } catch (error) {
-      console.error('Error loading theme preference:', error);
+      console.error('Error loaading theme preference:', error);
       // Agar localStorage'dan o'qish mumkin bo'lmasa, sistemaning default temasini ishlatish
       this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
       this.applyTheme();
