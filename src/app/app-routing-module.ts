@@ -17,9 +17,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     children: [
-      { path: 'home', component: Home },
+      { path: 'homeali', component: Home },
       { path: 'rating', component: Rating },
-      { path: 'profile', component: Profile },
+      { path: 'profilepele', component: Profile },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

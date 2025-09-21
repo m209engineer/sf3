@@ -1,93 +1,139 @@
-<div class="student-profile" [class.dark-mode]="isDarkMode">
-  <div class="profile-header">
-    <div class="profile-image">
-      <img [src]="student.image" [alt]="student.name">
-    </div>
-    <div class="profile-info">
-      <h1>{{ student.name }}</h1>
-      <p class="username">@{{ student.username }}</p>
-      <div class="level-badge">
-        <img [src]="'assets/' + student.level + '.png'" [alt]="student.level" onerror="this.src='assets/default-level.png'">
-        <span>{{ student.level }}</span>
+<app-navbar></app-navbar>
+
+<div class="home-page" [class.dark-mode]="isDarkMode">
+  <!-- Header Section -->
+  <header class="page-header">
+    <h1>Abutech O'quv Markazi</h1>
+    <p>Software Engineer 3-guruhi O'quv Platformasi</p>
+  </header>
+
+  <!-- Students Section -->
+  <section class="students-section card">
+    <h2>Abutech o'quv markazining SF3 dasturlash guruhi o'quvchilari</h2>
+    <div class="students-grid">
+      <div class="student-card" *ngFor="let student of students">
+        <img [src]="student.image" alt="{{ student.name }}">
+        <h3>{{ student.name }}</h3>
+        <p>@{{ student.username }}</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="level-progress">
-    <h2>Daraja Rivoji</h2>
-    <div class="progress-container">
-      <div class="progress-bar">
-        <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+  <!-- Site Purpose Section -->
+  <section class="purpose-section card">
+    <h2>🌐 Sayt Maqsadi</h2>
+    <div class="purpose-content">
+      <p>
+        Abutech o'quv markazining Software Engineer 3-guruhi uchun yaratilgan ushbu platformaning asosiy maqsadi — 
+        o'quvchilarning akademik faoliyatini adolatli, shaffof va qulay tarzda baholash hamda kuzatib borishdir.
+      </p>
+      <p>
+        Baholash jarayonida quyidagi mezonlar hisobga olinadi: Umumiy (barcha ko'rsatkichlar yig'indisi), 
+        Davomat (darslarda qatnashish faoliyati), Uy vazifa (uyga vazifalarni bajarish sifati), 
+        Topshiriqlar (qo'shimcha vazifalar va loyihalarni bajarish), Jarima (intizomiy qoidabuzarliklar uchun ball kamaytirilishi).
+      </p>
+      <p>
+        Ushbu tizim orqali o'quvchilar o'z yutuqlarini kuzatib borishlari, reyting jadvalida o'z o'rnini ko'rishlari 
+        hamda yuqori darajaga erishish uchun motivatsiya olishlari mumkin.
+      </p>
+    </div>
+  </section>
+
+  <!-- Scoring System Section -->
+  <section class="scoring-section card">
+    <h2>📊 Baholash Tizimi</h2>
+    <div class="scoring-grid">
+      <div class="scoring-item">
+        <div class="scoring-icon">
+          <i class="fas fa-user-check"></i>
+        </div>
+        <h3>Davomat</h3>
+        <p>Darslarda qatnashish faoliyati</p>
+        <span class="score-value">10 balldan</span>
       </div>
-      <div class="progress-labels">
-        <span>{{ levels[currentLevelIndex].name }}</span>
-        <span *ngIf="nextLevel">{{ nextLevel.name }}</span>
-        <span *ngIf="!nextLevel">Maksimal Daraja</span>
+
+      <div class="scoring-item">
+        <div class="scoring-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <h3>Uy vazifa</h3>
+        <p>Uyga vazifalarni bajarish sifati</p>
+        <span class="score-value">10 balldan</span>
+      </div>
+
+      <div class="scoring-item">
+        <div class="scoring-icon">
+          <i class="fas fa-tasks"></i>
+        </div>
+        <h3>Topshiriqlar</h3>
+        <p>Qo'shimcha vazifalar va loyihalar</p>
+        <span class="score-value">0 dan cheksizgacha</span>
+      </div>
+
+      <div class="scoring-item">
+        <div class="scoring-icon">
+          <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h3>Jarima</h3>
+        <p>Intizomiy qoidabuzarliklar</p>
+        <span class="score-value">
+          Kechikish (10 minutdan koʻp) - (-10)<br>
+          Kechikish (10 minutdan kam) - 0<br>
+          Darsda - 0 dan cheksiz
+        </span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="month-selector">
-    <h2>Oy Hisoboti</h2>
-    <select (change)="onMonthChange($event)">
-      <option *ngFor="let month of months" [value]="month" [selected]="month === selectedMonth">
-        {{ month | date: 'MMMM yyyy' }}
-      </option>
-    </select>
-  </div>
+  <!-- Levels Section -->
+  <section class="levels-section card">
+    <h2>🏆 Darajalar Tizimi</h2>
+    <div class="levels-grid">
+      <div class="level-item" *ngFor="let level of levels">
+        <img [src]="level.name + '.png'" [alt]="level.name + ' Tez kunda'">
+        <h3>{{ level.name }}</h3>
+        <p>{{ level.xp }} XP</p>
+      </div>
+    </div>
+  </section>
 
-  <div class="stats-grid" *ngIf="monthData">
-    <div class="stat-card">
-      <div class="stat-icon">📊</div>
-      <h3>Umumiy Ball</h3>
-      <div class="stat-value">{{ totalScore }}</div>
+  <!-- Abutech Promotion Section -->
+  <section class="abutech-promo card">
+    <div class="abutech-content">
+      <img src="https://abutechuz.vercel.app/images/image-2.png" alt="Abutech Logo" class="abutech-logo">
+      <div class="abutech-info">
+        <h2>Abutech</h2>
+        <p>
+          Abutech o'quv markazi asosiy web saytiga tashrif buyuring va biz haqimizda ko'proq ma'limotga ega bo'ling.
+          Zamonaviy kasblarni o'rganing va kelajagingizni yarating!
+        </p>
+        <a href="https://abutechuz.vercel.app/app" target="_blank" class="visit-button">
+          Saytga tashrif buyurish <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
     </div>
-    
-    <div class="stat-card">
-      <div class="stat-icon">👥</div>
-      <h3>Davomat</h3>
-      <div class="stat-value">{{ attendanceScore }}</div>
-      <div class="stat-detail">{{ monthData.davomat }} ta dars</div>
-    </div>
-    
-    <div class="stat-card">
-      <div class="stat-icon">🏠</div>
-      <h3>Uy Vazifa</h3>
-      <div class="stat-value">{{ homeworkScore }}</div>
-      <div class="stat-detail">{{ monthData.uy_vazifa }} ta topshiriq</div>
-    </div>
-    
-    <div class="stat-card">
-      <div class="stat-icon">✅</div>
-      <h3>Topshiriqlar</h3>
-      <div class="stat-value">{{ tasksScore }}</div>
-      <div class="stat-detail">{{ monthData.tasks }} ball</div>
-    </div>
-    
-    <div class="stat-card">
-      <div class="stat-icon">⚠️</div>
-      <h3>Jarima</h3>
-      <div class="stat-value">-{{ penaltyScore }}</div>
-      <div class="stat-detail">{{ monthData.jarima }} ball</div>
-    </div>
-  </div>
+  </section>
 
-  <div class="info-section">
-    <h2>Baholash Tizimi</h2>
-    <p>
-      Abutech o'quv markazining Software Engineer 3-guruhi uchun yaratilgan ushbu platformaning asosiy maqsadi — 
-      o'quvchilarning akademik faoliyatini adolatli, shaffof va qulay tarzda baholash hamda kuzatib borishdir.
-    </p>
-    
-    <div class="evaluation-criteria">
-      <h3>Baholash Mezonlari:</h3>
-      <ul>
-        <li><strong>📊 Umumiy</strong> — barcha ko'rsatkichlar yig'indisi</li>
-        <li><strong>👥 Davomat</strong> — darslarda qatnashish faoliyati (har bir dars: 10 ball)</li>
-        <li><strong>🏠 Uy vazifa</strong> — uyga vazifalarni bajarish sifati (har bir topshiriq: 10 ball)</li>
-        <li><strong>✅ Topshiriqlar</strong> — qo'shimcha vazifalar va loyihalarni bajarish (0 dan cheksiz)</li>
-        <li><strong>⚠️ Jarima</strong> — intizomiy qoidabuzarliklar uchun ball kamaytirilishi</li>
-      </ul>
+  <!-- Social Media Section -->
+  <section class="social-section card">
+    <h2>Bizni ijtimoiy tarmoqlarda kuzatib boring</h2>
+    <div class="social-grid">
+      <a href="https://t.me/abutech_uz" target="_blank" class="social-item">
+        <i class="fab fa-telegram"></i>
+        <span>Telegram</span>
+      </a>
+      <a href="https://github.com/m209engineer" target="_blank" class="social-item">
+        <i class="fab fa-github"></i>
+        <span>GitHub</span>
+      </a>
+      <a href="https://instagram.com/18761908_muhammadaziz" target="_blank" class="social-item">
+        <i class="fab fa-instagram"></i>
+        <span>Instagram</span>
+      </a>
+      <a href="https://youtube.com/@mr.otabek" target="_blank" class="social-item">
+        <i class="fab fa-youtube"></i>
+        <span>YouTube</span>
+      </a>
     </div>
-  </div>
+  </section>
 </div>

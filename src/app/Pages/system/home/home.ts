@@ -26,16 +26,18 @@ interface Level {
 }
 
 @Component({
-  selector: 'app-student-profile',
+  selector: 'app-home',
   standalone:false,
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })
 export class Home implements OnInit {
-  student: Student = (studentsData as any)[2]; // 3-id li student
-  isDarkMode: boolean = false;
+  isDarkMode = false;
+  students: Student[] = [];
   
   levels: Level[] = [
+    { name: 'Yalqov', xp: -100 },
+    { name: 'Maymuncha', xp: -1 },
     { name: 'Beginner', xp: 0 },
     { name: 'Novice', xp: 10 },
     { name: 'Junior', xp: 20 },
@@ -48,31 +50,19 @@ export class Home implements OnInit {
     { name: 'Expert', xp: 250 },
     { name: 'Guru', xp: 300 },
     { name: 'Master', xp: 360 },
-    { name: 'GrandMaster', xp: 430 },
-    { name: 'Legend', xp: 500 }
+    { name: 'Grandmaster', xp: 430 },
+    { name: 'Legend 3', xp: 500 },
+    { name: 'Legend 2', xp: 750 },
+    { name: 'Legend 1', xp: 1000 }
+
   ];
 
-  currentLevelIndex: number = 0;
-  nextLevel: Level | null = null;
-  progressPercentage: number = 0;
-
-  months: string[] = [];
-  selectedMonth: string = '';
-  monthData: MonthData | null = null;
-
-  totalScore: number = 0;
-  attendanceScore: number = 0;
-  homeworkScore: number = 0;
-  tasksScore: number = 0;
-  penaltyScore: number = 0;
-
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadThemePreference();
-    this.processStudentData();
-    this.calculateScores();
+    this.loadStudentsData();
   }
 
-  private loadThemePreference(): void {
+  private loadThemePreference() {
     try {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {
@@ -86,62 +76,58 @@ export class Home implements OnInit {
     }
   }
 
-  private processStudentData(): void {
-    // Oylar ro'yxatini olish
-    this.months = Object.keys(this.student.months).sort().reverse();
-    this.selectedMonth = this.months[0] || '';
-    this.monthData = this.student.months[this.selectedMonth] || null;
-
-    // Darajani aniqlash
-    const currentLevelName = this.student.level;
-    this.currentLevelIndex = this.levels.findIndex(level => level.name === currentLevelName);
-    
-    if (this.currentLevelIndex < this.levels.length - 1) {
-      this.nextLevel = this.levels[this.currentLevelIndex + 1];
-    } else {
-      this.nextLevel = null;
+  private loadStudentsData() {
+    // JSON fayldan ma'lumotlarni olish
+    try {
+      // TypeScriptda JSON importini qayta ishlash
+      this.students = (studentsData as any).default || studentsData;
+    } catch (error) {
+      console.error('Error loading students data:', error);
+      // Agar JSON fayldan ma'lumot olishda xatolik bo'lsa, namuna ma'lumotlardan foydalanish
+      this.students = [
+        {
+          id: 1,
+          name: "Student 1",
+          username: "student1",
+          password: "password1",
+          image: "https://via.placeholder.com/150",
+          level: "Beginner",
+          months: {}
+        },
+        {
+          id: 2,
+          name: "Student 2",
+          username: "student2",
+          password: "password2",
+          image: "https://via.placeholder.com/150",
+          level: "Novice",
+          months: {}
+        },
+        {
+          id: 3,
+          name: "Ibrohimjon",
+          username: "ibrohimjon",
+          password: "12946",
+          image: "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+          level: "OK",
+          months: {
+            "2025-08": { davomat: 6, uy_vazifa: 0, tasks: 78, jarima: 78 },
+            "2025-09": { davomat: 100, uy_vazifa: 15, tasks: 54, jarima: 58 }
+          }
+        },
+        {
+          id: 5,
+          name: "Elnurbek",
+          username: "elnurbek",
+          password: "30417",
+          image: "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
+          level: "OK",
+          months: {
+            "2025-08": { davomat: 6, uy_vazifa: 0, tasks: 88, jarima: 51 },
+            "2025-09": { davomat: 120, uy_vazifa: 35, tasks: 85, jarima: 508 }
+          }
+        }
+      ];
     }
-
-    // Progress foizini hisoblash
-    if (this.nextLevel) {
-      const currentXP = this.levels[this.currentLevelIndex].xp;
-      const nextXP = this.nextLevel.xp;
-      const studentXP = this.calculateTotalXP();
-      this.progressPercentage = Math.min(100, Math.max(0, (studentXP - currentXP) / (nextXP - currentXP) * 100));
-    } else {
-      this.progressPercentage = 100;
-    }
-  }
-
-  private calculateTotalXP(): number {
-    let totalXP = 0;
-    
-    for (const month of this.months) {
-      const data = this.student.months[month];
-      totalXP += data.davomat * 10; // Davomat - 10 bal
-      totalXP += data.uy_vazifa * 10; // Uy ishi - 10 bal
-      totalXP += data.tasks; // Tasks - 0 dan cheksiz
-      totalXP -= data.jarima; // Jarima - minus
-    }
-    
-    return totalXP;
-  }
-
-  private calculateScores(): void {
-    if (!this.monthData) return;
-
-    this.attendanceScore = this.monthData.davomat * 10;
-    this.homeworkScore = this.monthData.uy_vazifa * 10;
-    this.tasksScore = this.monthData.tasks;
-    this.penaltyScore = this.monthData.jarima;
-    
-    this.totalScore = this.attendanceScore + this.homeworkScore + this.tasksScore - this.penaltyScore;
-  }
-
-  onMonthChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.selectedMonth = target.value;
-    this.monthData = this.student.months[this.selectedMonth];
-    this.calculateScores();
   }
 }

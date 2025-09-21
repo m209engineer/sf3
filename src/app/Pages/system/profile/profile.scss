@@ -1,0 +1,671 @@
+// profile.component.scss
+// Color variables
+$primary-color: #312e81;
+$secondary-color: #6b7280;
+$accent-color: #4f46e5;
+$background-light: #f9fafb;
+$text-light: #1f2937;
+$card-light: #ffffff;
+$border-light: #e5e7eb;
+$header-light: #f3f4f6;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$danger-color: #ef4444;
+$info-color: #3b82f6;
+
+.profile-page {
+  min-height: 100vh;
+  background-color: $background-light;
+  color: $text-light;
+  padding: 1rem;
+  padding-top: 5rem;
+
+  // Profile Header
+  .profile-header {
+    background: linear-gradient(135deg, $primary-color, lighten($primary-color, 15%));
+    color: white;
+    padding: 2rem 1rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .profile-info {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      position: relative;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+    }
+
+    .avatar-container {
+      position: relative;
+      
+      .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        
+        @media (max-width: 480px) {
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      .level-badge {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        background: white;
+        border-radius: 20px;
+        padding: 0.5rem 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+
+        img {
+          width: 24px;
+          height: 24px;
+          object-fit: contain;
+        }
+
+        span {
+          color: $primary-color;
+          font-weight: 600;
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .user-info {
+      flex: 1;
+
+      .user-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          width: 100%;
+        }
+
+        .logout-container {
+          position: absolute;
+          top: 0;
+          right: 0;
+
+          @media (max-width: 768px) {
+            position: relative;
+            align-self: flex-end;
+            margin-top: -3rem;
+          }
+
+          .three-dots {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background 0.3s;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.3);
+            }
+          }
+
+          .logout-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            padding: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            min-width: 150px;
+
+            button {
+              width: 100%;
+              background: $danger-color;
+              color: white;
+              border: none;
+              padding: 0.75rem;
+              border-radius: 6px;
+              cursor: pointer;
+              font-weight: 500;
+              transition: background 0.3s;
+
+              &:hover {
+                background: darken($danger-color, 10%);
+              }
+            }
+          }
+        }
+      }
+
+      h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2.2rem;
+        
+        @media (max-width: 480px) {
+          font-size: 1.8rem;
+        }
+      }
+
+      .username {
+        margin: 0 0 1.5rem 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+      }
+
+      .stats {
+        display: flex;
+        gap: 2rem;
+
+        @media (max-width: 480px) {
+          gap: 1rem;
+          justify-content: center;
+        }
+
+        .stat-item {
+          text-align: center;
+          
+          .stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+          }
+
+          .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+
+  // Profile Content
+  .profile-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  // Card Styles
+  .card {
+    background-color: $card-light;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      color: $primary-color;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  // Current Month Section
+  .current-month-section {
+    .performance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .current-month-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid $border-light;
+
+      .month-xp h3 {
+        margin: 0;
+        color: $primary-color;
+      }
+
+      .month-level {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+
+        .level-image-medium {
+          width: 36px;
+          height: 36px;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
+  // Performance Section
+  .performance-section {
+    .performance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  // Performance Card
+  .performance-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: lighten($background-light, 2%);
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .performance-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      
+      &.attendance {
+        background-color: rgba(79, 70, 229, 0.1);
+        color: $accent-color;
+      }
+      
+      &.homework {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: $success-color;
+      }
+      
+      &.tasks {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: $info-color;
+      }
+      
+      &.penalty {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: $danger-color;
+      }
+    }
+
+    .performance-details {
+      flex: 1;
+
+      h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1rem;
+      }
+
+      .performance-value {
+        font-weight: bold;
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .performance-description {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.7;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .performance-info {
+        margin: 0.5rem 0 0 0;
+        font-size: 0.8rem;
+        opacity: 0.7;
+        font-style: italic;
+      }
+    }
+  }
+
+  // Progress Bar
+  .progress-bar {
+    height: 8px;
+    background-color: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+    position: relative;
+
+    .progress-fill {
+      height: 100%;
+      background-color: $primary-color;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      position: relative;
+
+      .progress-percentage {
+        position: absolute;
+        right: 5px;
+        top: -20px;
+        background: $primary-color;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: bold;
+      }
+    }
+  }
+
+  // Side by side section for level and XP
+  .side-by-side-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  // Level Section
+  .level-section {
+    .level-content {
+      .level-progress-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+
+        .current-level-info,
+        .next-level-info {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .level-image-large {
+          width: 80px;
+          height: 80px;
+          object-fit: contain;
+        }
+        
+        .level-image-small {
+          width: 50px;
+          height: 50px;
+          object-fit: contain;
+          opacity: 0.7;
+        }
+
+        .level-name {
+          font-size: 0.9rem;
+          font-weight: 500;
+          text-align: center;
+        }
+      }
+
+      .progress-container {
+        .progress-bar {
+          height: 12px;
+          margin-bottom: 0.5rem;
+        }
+
+        .progress-labels {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.8rem;
+          opacity: 0.8;
+          margin-bottom: 0.5rem;
+        }
+
+        .progress-info {
+          margin: 0.5rem 0 0 0;
+          text-align: center;
+          font-size: 0.9rem;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  // XP Section
+  .xp-section {
+    .xp-details {
+      .xp-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid $border-light;
+
+        &:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+
+        &.total {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 2px solid $primary-color;
+          font-weight: bold;
+        }
+
+        .xp-label {
+          opacity: 0.8;
+        }
+
+        .xp-value {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  // Monthly Section
+  .monthly-section {
+    .months-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+
+      .month-card {
+        border: 1px solid $border-light;
+        border-radius: 12px;
+        padding: 1.2rem;
+        transition: transform 0.3s;
+
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+          margin-top: 0;
+          color: $primary-color;
+          text-transform: uppercase;
+          font-size: 1rem;
+          border-bottom: 1px solid $border-light;
+          padding-bottom: 0.5rem;
+        }
+
+        .month-stats {
+          .month-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+
+            .stat-label {
+              opacity: 0.7;
+            }
+
+            .stat-value {
+              font-weight: 500;
+            }
+          }
+        }
+
+        .month-total {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid $border-light;
+          font-weight: 500;
+          text-align: center;
+          color: $primary-color;
+        }
+      }
+    }
+  }
+
+  // Responsive improvements
+  @media (max-width: 768px) {
+    .side-by-side-section {
+      grid-template-columns: 1fr;
+    }
+    
+    .performance-grid {
+      grid-template-columns: 1fr !important;
+    }
+    
+    .months-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .profile-header {
+      .user-info {
+        .user-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+
+          .logout-container {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .profile-page {
+      padding: 0.5rem;
+      padding-top: 4rem;
+    }
+
+    .current-month-section {
+      .current-month-summary {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+
+    .level-section {
+      .level-content {
+        .level-progress-header {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+.month-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  
+  h3 {
+    margin: 0;
+    color: $primary-color;
+  }
+  
+  .month-level {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    
+    .level-image-small {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+    
+    span {
+      font-weight: 500;
+      color: $secondary-color;
+    }
+  }
+}
+
+.month-stat {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  
+  .stat-label {
+    font-weight: 500;
+    opacity: 0.8;
+  }
+  
+  .stat-value {
+    font-weight: 600;
+    color: $primary-color;
+  }
+  
+  .stat-description {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    font-style: italic;
+  }
+}
+
+.month-total {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid $border-light;
+  font-weight: 600;
+  text-align: center;
+  color: $primary-color;
+}

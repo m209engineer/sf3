@@ -41,10 +41,10 @@ export class System implements OnInit {
   totalJarima: number = 0; // Yangi qo'shilgan maydon
 
   menuItems: MenuItem[] = [
-    // { title: 'Bosh Sahifa', path: '/system/home', icon: 'fas fa-home' },
+    { title: 'Bosh Sahifa', path: '/system/home', icon: 'fas fa-home' },
     { title: 'Reyting', path: '/system/rating', icon: 'fas fa-chart-line' },
 
-    // { title: 'Profil', path: '/system/profile', icon: 'fas fa-user' },
+    { title: 'Profil', path: '/system/profile', icon: 'fas fa-user' },
     // Yangi menyu elementi
 
   ];

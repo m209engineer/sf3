@@ -1,3 +1,308 @@
-<app-navbar></app-navbar>
+<!-- profile.component.html -->
+<div class="profile-page">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="profile-info">
+      <div class="avatar-container">
+        <img [src]="student?.image" alt="{{ student?.name }}" class="avatar">
+        <div class="level-badge">
+          <img [src]="getCurrentLevel().image" [alt]="getCurrentLevel().name + ' level'">
+          <span>{{ getCurrentLevel().name }}</span>
+        </div>
+      </div>
+      
+      <div class="user-info">
+        <div class="user-header">
+          <h1>{{ student?.name }}</h1>
+          <div class="logout-container">
+            <button class="three-dots" (click)="toggleLogout()">•••</button>
+            <div class="logout-dropdown" *ngIf="showLogoutButton">
+              <button (click)="logout()">Hisobdan chiqish</button>
+            </div>
+          </div>
+        </div>
+        <p class="username">@{{ student?.username }}</p>
+        <div class="stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ getTotalMonths() }}</span>
+            <span class="stat-label">Oylar</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ getRankPosition() }}</span>
+            <span class="stat-label">Reyting</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ calculateTotalXP() }}</span>
+            <span class="stat-label">XP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<p>profile works!</p>
+  <!-- Main Content -->
+  <div class="profile-content">
+    <!-- Ayni oydagi ko'rsatkichlar -->
+    <section class="current-month-section card">
+      <h2>📈 {{ formatMonth(currentMonth) }} Ko'rsatkichlari</h2>
+      <div class="performance-grid">
+        <!-- Davomat kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon attendance">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Davomat</h3>
+            <span class="performance-value">{{ getCurrentMonthAttendancePercentage() }}%</span>
+            <span class="performance-description">
+              {{ getCurrentMonthAttendedLessons() }}/{{ monthDetails[currentMonth]?.totalLessons || 0 }} dars
+            </span>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getCurrentMonthAttendancePercentage()"></div>
+              <div class="progress-background"></div>
+            </div>
+            <p class="performance-info">{{ getCurrentMonthAttendanceXP() }} XP</p>
+          </div>
+        </div>
+        <!-- Uy vazifa kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon homework">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Uy vazifa</h3>
+            <span class="performance-value">{{ getCurrentMonthHomeworkPercentage() }}%</span>
+            <span class="performance-description">
+              {{ getMonthData(currentMonth).uy_vazifa }}/{{ (monthDetails[currentMonth]?.homeworkLessons || 0) * 10 }} ball
+            </span>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getCurrentMonthHomeworkPercentage()"></div>
+              <div class="progress-background"></div>
+            </div>
+            <p class="performance-info">{{ getCurrentMonthHomeworkXP() }} XP</p>
+          </div>
+        </div>
+
+        <!-- Topshiriqlar kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon tasks">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Topshiriqlar</h3>
+            <span class="performance-value">{{ getMonthData(currentMonth).tasks }}</span>
+            <span class="performance-description">Bajarilgan topshiriqlar</span>
+            <p class="performance-info">{{ getMonthData(currentMonth).tasks }} XP</p>
+          </div>
+        </div>
+
+        <!-- Jarima kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon penalty">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Jarima</h3>
+            <span class="performance-value">{{ getMonthData(currentMonth).jarima }}</span>
+            <span class="performance-description">Jami jarima ballari</span>
+            <p class="performance-info">-{{ getMonthData(currentMonth).jarima }} XP</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="current-month-summary">
+        <div class="month-xp">
+          <h3>Jami XP: {{ calculateCurrentMonthXP() }}</h3>
+        </div>
+        <div class="month-level">
+          <img [src]="getCurrentMonthLevel().image" [alt]="getCurrentMonthLevel().name + ' level'" class="level-image-medium">
+          <span>{{ getCurrentMonthLevel().name }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Umumiy ko'rsatkichlar -->
+    <section class="performance-section card">
+      <h2>📊 Umumiy Ko'rsatkichlar</h2>
+      <div class="performance-grid">
+        <!-- Davomat kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon attendance">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Davomat</h3>
+            <span class="performance-value">{{ getTotalAttendancePercentage() }}%</span>
+            <span class="performance-description">Umumiy darslarda qatnashish</span>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getTotalAttendancePercentage()"></div>
+              <div class="progress-background"></div>
+            </div>
+            <p class="performance-info">{{ getAttendanceXP() }} XP</p>
+          </div>
+        </div>
+
+        <!-- Uy vazifa kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon homework">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Uy vazifa</h3>
+            <span class="performance-value">{{ getTotalHomeworkPercentage() }}%</span>
+            <span class="performance-description">Umumiy baholash</span>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getTotalHomeworkPercentage()"></div>
+              <div class="progress-background"></div>
+            </div>
+            <p class="performance-info">{{ getHomeworkXP() }} XP</p>
+          </div>
+        </div>
+
+        <!-- Topshiriqlar kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon tasks">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Topshiriqlar</h3>
+            <span class="performance-value">{{ getTotalTasks() }}</span>
+            <span class="performance-description">Bajarilgan topshiriqlar soni</span>
+            <p class="performance-info">{{ getTotalTasks() }} XP</p>
+          </div>
+        </div>
+
+        <!-- Jarima kartasi -->
+        <div class="performance-card">
+          <div class="performance-icon penalty">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+          <div class="performance-details">
+            <h3>Jarima</h3>
+            <span class="performance-value">{{ getTotalPenalty() }}</span>
+            <span class="performance-description">Jami jarima ballari</span>
+            <p class="performance-info">-{{ getTotalPenalty() }} XP</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Level Progress and XP Breakdown Side by Side -->
+    <div class="side-by-side-section">
+      <!-- Level Progress -->
+      <section class="level-section card">
+        <h2>🏆 Daraja Progressi</h2>
+        <div class="level-content">
+          <div class="level-progress-header">
+            <div class="current-level-info">
+              <img [src]="getCurrentLevel().image" [alt]="getCurrentLevel().name + ' level'" class="level-image-large">
+              <span class="level-name">{{ getCurrentLevel().name }}</span>
+            </div>
+            
+            <div class="next-level-info">
+              <img [src]="getNextLevel()?.image || getCurrentLevel().image" [alt]="(getNextLevel()?.name || getCurrentLevel().name) + ' level'" class="level-image-small">
+              <span class="level-name">{{ getNextLevel()?.name || 'Eng yuqori' }}</span>
+            </div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getLevelProgress()">
+                <span class="progress-percentage">{{ getLevelProgress() }}%</span>
+              </div>
+            </div>
+            <div class="progress-labels">
+              <span>{{ getCurrentLevelXP() }} XP</span>
+              <span>{{ getNextLevelXP() }} XP</span>
+            </div>
+            <p class="progress-info" *ngIf="getNextLevel()">
+              Sizda {{ calculateTotalXP() }} XP bor. Keyingi daraja uchun {{ getXPToNextLevel() }} XP yig'ishingiz kerak.
+            </p>
+            <p class="progress-info" *ngIf="!getNextLevel()">
+              Siz eng yuqori darajadasiz! 🎉
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- XP Breakdown -->
+      <section class="xp-section card">
+        <h2>🧮 XP Hisoboti</h2>
+        <div class="xp-details">
+          <div class="xp-item">
+            <span class="xp-label">Davomatdan:</span>
+            <span class="xp-value">+{{ getAttendanceXP() }} XP</span>
+          </div>
+          <div class="xp-item">
+            <span class="xp-label">Uy vazifasidan:</span>
+            <span class="xp-value">+{{ getHomeworkXP() }} XP</span>
+          </div>
+          <div class="xp-item">
+            <span class="xp-label">Topshiriqlardan:</span>
+            <span class="xp-value">+{{ getTotalTasks() }} XP</span>
+          </div>
+          <div class="xp-item">
+            <span class="xp-label">Jarimalar:</span>
+            <span class="xp-value">-{{ getTotalPenalty() }} XP</span>
+          </div>
+          <div class="xp-item total">
+            <span class="xp-label">Jami XP:</span>
+            <span class="xp-value">{{ calculateTotalXP() }} XP</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Monthly Progress -->
+    <section class="monthly-section card">
+      <h2>📈 Oylik Progress</h2>
+      <div class="months-grid">
+        <div class="month-card" *ngFor="let month of getMonths()">
+          <div class="month-header">
+            <h3>{{ formatMonth(month) }}</h3>
+            <div class="month-level">
+              <img [src]="getMonthLevel(month).image" [alt]="getMonthLevel(month).name + ' level'" class="level-image-small">
+              <span>{{ getMonthLevel(month).name }}</span>
+            </div>
+          </div>
+          
+          <div class="month-stats">
+            <!-- Davomat -->
+            <div class="month-stat">
+              <span class="stat-label">Davomat:</span>
+              <span class="stat-value">{{ getMonthAttendancePercentage(month) }}%</span>
+              <span class="stat-description">
+                ({{ getMonthAttendedLessons(month) }}/{{ getMonthTotalLessons(month) }} dars)
+              </span>
+            </div>
+            
+            <!-- Uy vazifa -->
+            <div class="month-stat">
+              <span class="stat-label">Uy vazifa:</span>
+              <span class="stat-value">{{ getMonthHomeworkPercentage(month) }}%</span>
+              <span class="stat-description">
+                ({{ getMonthData(month).uy_vazifa }}/{{ getMonthMaxHomeworkScore(month) }} ball)
+              </span>
+            </div>
+            
+            <!-- Tasks -->
+            <div class="month-stat">
+              <span class="stat-label">Tasks:</span>
+              <span class="stat-value">{{ getMonthData(month).tasks }}</span>
+            </div>
+            
+            <!-- Jarima -->
+            <div class="month-stat">
+              <span class="stat-label">Jarima:</span>
+              <span class="stat-value">{{ getMonthData(month).jarima }}</span>
+            </div>
+          </div>
+          
+          <div class="month-total">
+            <span>Jami: {{ calculateMonthTotal(month) }} XP</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

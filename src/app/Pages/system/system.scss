@@ -7,6 +7,7 @@ $text-light: #1f2937;
 $text-dark: #d1d5db;
 $sidebar-width: 260px;
 $sidebar-collapsed-width: 64px;
+$hover-color: #2563eb; // New hover color for non-active items
 
 .system-container {
   display: flex;
@@ -40,8 +41,9 @@ $sidebar-collapsed-width: 64px;
             border-left: 3px solid $accent-color;
           }
 
-          &:hover {
-            background: lighten($background-dark, 5%);
+          &:hover:not(.active) {
+            background: $hover-color;
+            color: #ffffff;
           }
         }
       }
@@ -81,8 +83,9 @@ $sidebar-collapsed-width: 64px;
           background: lighten($background-dark, 5%);
         }
 
-        &:hover {
-          background: lighten($background-dark, 7%);
+        &:hover:not(.active) {
+          background: $hover-color;
+          color: #ffffff;
         }
 
         &.theme-toggle {
@@ -191,7 +194,7 @@ $sidebar-collapsed-width: 64px;
 
   .sidebar-nav {
     flex: 1;
-    padding: 1.25rem 0;
+    padding: 1.5rem 0; // Increased padding for more spacing
 
     .nav-item {
       display: flex;
@@ -203,7 +206,7 @@ $sidebar-collapsed-width: 64px;
       transition: all 0.2s ease;
       font-size: 1rem;
       border-radius: 8px;
-      margin: 0 1rem;
+      margin: 0.5rem 1rem; // Increased margin for more spacing between items
 
       &.active {
         background: lighten($primary-color, 48%);
@@ -211,9 +214,9 @@ $sidebar-collapsed-width: 64px;
         border-left: 3px solid $accent-color;
       }
 
-      &:hover {
-        background: lighten($primary-color, 50%);
-        color: $primary-color;
+      &:hover:not(.active) {
+        background: $hover-color;
+        color: #ffffff;
       }
 
       i {
@@ -229,14 +232,14 @@ $sidebar-collapsed-width: 64px;
   }
 
   .sidebar-footer {
-    padding: 1.25rem;
+    padding: 1.5rem; // Increased padding for more spacing
     border-top: 1px solid #e5e7eb;
 
     .user-info {
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem; // Increased margin for more spacing
 
       .user-avatar {
         width: 40px;
@@ -302,8 +305,7 @@ $sidebar-collapsed-width: 64px;
   margin-left: $sidebar-width;
   background: $background-light;
   transition: margin-left 0.3s ease, background 0.3s ease;
-  padding: 0; // Removed padding to eliminate gap
-  
+  padding: 0;
 
   &.content-expanded {
     margin-left: $sidebar-collapsed-width;
@@ -321,7 +323,7 @@ $sidebar-collapsed-width: 64px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: 0.75rem 0; // Increased padding for more spacing
   z-index: 1000;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
   height: 60px;
@@ -334,7 +336,7 @@ $sidebar-collapsed-width: 64px;
     justify-content: center;
     color: $text-light;
     text-decoration: none;
-    padding: 0.5rem;
+    padding: 0.75rem; // Increased padding for more spacing
     transition: all 0.2s ease;
     font-size: 0.875rem;
     border-radius: 6px;
@@ -345,13 +347,14 @@ $sidebar-collapsed-width: 64px;
       background: lighten($primary-color, 50%);
     }
 
-    &:hover {
-      background: lighten($primary-color, 48%);
+    &:hover:not(.active) {
+      background: $hover-color;
+      color: #ffffff;
     }
 
     i {
       font-size: 1.25rem;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.3rem; // Slightly increased for spacing
     }
 
     .nav-label {
@@ -388,7 +391,7 @@ $sidebar-collapsed-width: 64px;
   .main-content {
     margin-left: 0;
     padding: 0;
-    padding-bottom: 60px; // Space for mobile nav
+    padding-bottom: 60px;
   }
 }
 
