@@ -1,44 +1,53 @@
+<app-navbar></app-navbar>
+
 <!-- profile.component.html -->
 <div class="profile-page">
-  <!-- Profile Header -->
-  <div class="profile-header">
-    <div class="profile-info">
-      <div class="avatar-container">
-        <img [src]="student?.image" alt="{{ student?.name }}" class="avatar">
-        <div class="level-badge">
-          <img [src]="getCurrentLevel().image" [alt]="getCurrentLevel().name + ' level'">
-          <span>{{ getCurrentLevel().name }}</span>
+<div class="profile-header">
+  <div class="profile-info">
+    <div class="avatar-container">
+      <img [src]="student?.image" alt="{{ student?.name }}" class="avatar">
+      <div class="level-badge">
+        <img [src]="getCurrentLevel().image" [alt]="getCurrentLevel().name + ' level'">
+      </div>
+    </div>
+    
+    <div class="user-info">
+      <div class="user-header">
+        <div class="user-name-container">
+          <h1>{{ student?.name }}</h1>
+          <p class="username">@{{ student?.username }}</p>
         </div>
       </div>
-      
-      <div class="user-info">
-        <div class="user-header">
-          <h1>{{ student?.name }}</h1>
-          <div class="logout-container">
-            <button class="three-dots" (click)="toggleLogout()">•••</button>
-            <div class="logout-dropdown" *ngIf="showLogoutButton">
-              <button (click)="logout()">Hisobdan chiqish</button>
-            </div>
-          </div>
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-value">{{ getTotalMonths() }}</span>
+          <span class="stat-label">Oylar</span>
         </div>
-        <p class="username">@{{ student?.username }}</p>
-        <div class="stats">
-          <div class="stat-item">
-            <span class="stat-value">{{ getTotalMonths() }}</span>
-            <span class="stat-label">Oylar</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">{{ getRankPosition() }}</span>
-            <span class="stat-label">Reyting</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">{{ calculateTotalXP() }}</span>
-            <span class="stat-label">XP</span>
-          </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ getRankPosition() }}</span>
+          <span class="stat-label">Reyting</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ calculateTotalXP() }}</span>
+          <span class="stat-label">XP</span>
         </div>
       </div>
     </div>
+    
+    <!-- Logout tugmasini profile-info darajasiga ko'tarildi -->
+    <div class="logout-container">
+      <button class="three-dots" (click)="toggleLogout()">
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+      <div class="logout-dropdown" *ngIf="showLogoutButton">
+        <button (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Hisobdan chiqish
+        </button>
+      </div>
+    </div>
   </div>
+</div>
 
   <!-- Main Content -->
   <div class="profile-content">
@@ -190,40 +199,60 @@
     <!-- Level Progress and XP Breakdown Side by Side -->
     <div class="side-by-side-section">
       <!-- Level Progress -->
-      <section class="level-section card">
-        <h2>🏆 Daraja Progressi</h2>
-        <div class="level-content">
-          <div class="level-progress-header">
-            <div class="current-level-info">
-              <img [src]="getCurrentLevel().image" [alt]="getCurrentLevel().name + ' level'" class="level-image-large">
-              <span class="level-name">{{ getCurrentLevel().name }}</span>
-            </div>
-            
-            <div class="next-level-info">
-              <img [src]="getNextLevel()?.image || getCurrentLevel().image" [alt]="(getNextLevel()?.name || getCurrentLevel().name) + ' level'" class="level-image-small">
-              <span class="level-name">{{ getNextLevel()?.name || 'Eng yuqori' }}</span>
-            </div>
-          </div>
-          
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="getLevelProgress()">
-                <span class="progress-percentage">{{ getLevelProgress() }}%</span>
-              </div>
-            </div>
-            <div class="progress-labels">
-              <span>{{ getCurrentLevelXP() }} XP</span>
-              <span>{{ getNextLevelXP() }} XP</span>
-            </div>
-            <p class="progress-info" *ngIf="getNextLevel()">
-              Sizda {{ calculateTotalXP() }} XP bor. Keyingi daraja uchun {{ getXPToNextLevel() }} XP yig'ishingiz kerak.
-            </p>
-            <p class="progress-info" *ngIf="!getNextLevel()">
-              Siz eng yuqori darajadasiz! 🎉
-            </p>
+<!-- Level Progress -->
+<section class="level-section card">
+  <h2>🏆 Daraja Progressi</h2>
+  <div class="level-content">
+    <!-- Daraja logosi (katta) va nomi -->
+    <div class="current-level-header">
+      <img [src]="getCurrentLevel().image" [alt]="getCurrentLevel().name + ' level'" class="level-image-large">
+      <div class="level-title">
+        <span>Sizning darajangiz:</span>
+        <span class="level-name">{{ getCurrentLevel().name }}</span>
+      </div>
+    </div>
+    
+    <!-- Progress bar va logolar -->
+    <div class="level-progress-container">
+      <!-- Chap logo (hozirgi daraja) -->
+      <div class="level-logo left">
+        <img [src]="getCurrentLevel().image" [alt]="getCurrentLevel().name + ' level'" class="level-image-small">
+      </div>
+      
+      <!-- Progress bar -->
+      <div class="progress-wrapper">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="getLevelProgress()">
+            <span class="progress-percentage">{{ getLevelProgress() }}%</span>
           </div>
         </div>
-      </section>
+        <div class="progress-labels">
+          <span>{{ getCurrentLevelXP() }} XP</span>
+          <span>{{ getNextLevelXP() }} XP</span>
+        </div>
+      </div>
+      
+      <!-- O'ng logo (keyingi daraja) -->
+      <div class="level-logo right">
+        <img [src]="getNextLevel()?.image || getCurrentLevel().image" [alt]="(getNextLevel()?.name || getCurrentLevel().name) + ' level'" class="level-image-small">
+      </div>
+    </div>
+    
+    <!-- Keyingi daraja nomi -->
+    <div class="next-level-title" *ngIf="getNextLevel()">
+      <span>Keyingi daraja: </span>
+      <span class="level-name-small">{{ getNextLevel()?.name }}</span>
+    </div>
+    
+    <!-- Progress info -->
+    <p class="progress-info" *ngIf="getNextLevel()">
+      Sizda {{ calculateTotalXP() }} XP bor. Keyingi daraja uchun {{ getXPToNextLevel() }} XP yig'ishingiz kerak.
+    </p>
+    <p class="progress-info" *ngIf="!getNextLevel()">
+      Siz eng yuqori darajadasiz! 🎉
+    </p>
+  </div>
+</section>
 
       <!-- XP Breakdown -->
       <section class="xp-section card">

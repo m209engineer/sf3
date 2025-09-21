@@ -1,6 +1,6 @@
 // profile.component.scss
 // Color variables
-$primary-color: #312e81;
+$primary-color: #2563eb;
 $secondary-color: #6b7280;
 $accent-color: #4f46e5;
 $background-light: #f9fafb;
@@ -63,14 +63,12 @@ $info-color: #3b82f6;
 
       .level-badge {
         position: absolute;
-        bottom: -5px;
-        right: -5px;
+        bottom: 5px;
+        right: 5px;
         background: white;
-        border-radius: 20px;
-        padding: 0.5rem 0.8rem;
+        border-radius: 50%;
+        padding: 5px;
         display: flex;
-        align-items: center;
-        gap: 0.5rem;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         z-index: 2;
 
@@ -81,54 +79,76 @@ $info-color: #3b82f6;
         }
 
         span {
-          color: $primary-color;
-          font-weight: 600;
-          font-size: 0.9rem;
+          display: none;
         }
       }
     }
 
     .user-info {
       flex: 1;
+      position: relative;
 
       .user-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        position: relative;
-
-        @media (max-width: 768px) {
-          flex-direction: column;
-          align-items: center;
-          gap: 1rem;
-          width: 100%;
+        margin-bottom: 0.5rem;
+        
+        .user-name-container {
+          flex: 1;
+          
+          h1 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1.8rem;
+            
+            @media (max-width: 480px) {
+              font-size: 1.5rem;
+            }
+          }
+          
+          .username {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1rem;
+            
+            @media (max-width: 480px) {
+              font-size: 0.9rem;
+            }
+          }
         }
-
+        
         .logout-container {
           position: absolute;
           top: 0;
           right: 0;
-
+          
           @media (max-width: 768px) {
-            position: relative;
-            align-self: flex-end;
-            margin-top: -3rem;
+            position: absolute;
+            top: -10px;
+            right: -10px;
           }
 
           .three-dots {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1rem;
             padding: 0.5rem;
             border-radius: 50%;
             width: 40px;
             height: 40px;
             cursor: pointer;
             transition: background 0.3s;
-
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
             &:hover {
               background: rgba(255, 255, 255, 0.3);
+            }
+            
+            i {
+              font-size: 1.2rem;
             }
           }
 
@@ -141,7 +161,7 @@ $info-color: #3b82f6;
             padding: 0.5rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             z-index: 100;
-            min-width: 150px;
+            min-width: 180px;
 
             button {
               width: 100%;
@@ -153,34 +173,26 @@ $info-color: #3b82f6;
               cursor: pointer;
               font-weight: 500;
               transition: background 0.3s;
-
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              
               &:hover {
                 background: darken($danger-color, 10%);
+              }
+              
+              i {
+                font-size: 1rem;
               }
             }
           }
         }
       }
 
-      h1 {
-        margin: 0 0 0.5rem 0;
-        font-size: 2.2rem;
-        
-        @media (max-width: 480px) {
-          font-size: 1.8rem;
-        }
-      }
-
-      .username {
-        margin: 0 0 1.5rem 0;
-        opacity: 0.9;
-        font-size: 1.1rem;
-      }
-
       .stats {
         display: flex;
-        gap: 2rem;
-
+        gap: 1.5rem;
+        
         @media (max-width: 480px) {
           gap: 1rem;
           justify-content: center;
@@ -191,14 +203,22 @@ $info-color: #3b82f6;
           
           .stat-value {
             display: block;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
+            
+            @media (max-width: 480px) {
+              font-size: 1.1rem;
+            }
           }
 
           .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.8;
+            
+            @media (max-width: 480px) {
+              font-size: 0.7rem;
+            }
           }
         }
       }
@@ -384,7 +404,7 @@ $info-color: #3b82f6;
         background: $primary-color;
         color: white;
         padding: 2px 6px;
-        border-radius: 10px;
+        borderRadius: 10px;
         font-size: 0.7rem;
         font-weight: bold;
       }
@@ -399,67 +419,6 @@ $info-color: #3b82f6;
 
     @media (min-width: 1024px) {
       grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  // Level Section
-  .level-section {
-    .level-content {
-      .level-progress-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1.5rem;
-
-        .current-level-info,
-        .next-level-info {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .level-image-large {
-          width: 80px;
-          height: 80px;
-          object-fit: contain;
-        }
-        
-        .level-image-small {
-          width: 50px;
-          height: 50px;
-          object-fit: contain;
-          opacity: 0.7;
-        }
-
-        .level-name {
-          font-size: 0.9rem;
-          font-weight: 500;
-          text-align: center;
-        }
-      }
-
-      .progress-container {
-        .progress-bar {
-          height: 12px;
-          margin-bottom: 0.5rem;
-        }
-
-        .progress-labels {
-          display: flex;
-          justify-content: space-between;
-          font-size: 0.8rem;
-          opacity: 0.8;
-          margin-bottom: 0.5rem;
-        }
-
-        .progress-info {
-          margin: 0.5rem 0 0 0;
-          text-align: center;
-          font-size: 0.9rem;
-          opacity: 0.8;
-        }
-      }
     }
   }
 
@@ -553,6 +512,144 @@ $info-color: #3b82f6;
     }
   }
 
+  // Level Section
+  .level-section {
+    .level-content {
+      .current-level-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 3rem;
+        
+        .level-image-large {
+          width: 100px;
+          height: 100px;
+          object-fit: contain;
+          margin-bottom: 0.5rem;
+        }
+        
+        .level-title {
+          text-align: center;
+          
+          span:first-child {
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.2rem;
+          }
+          
+          .level-name {
+            font-weight: bold;
+            color: $primary-color;
+            font-size: 1.2rem;
+          }
+        }
+      }
+      
+      .level-progress-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        
+        .level-logo {
+          flex-shrink: 0;
+          
+          &.left {
+            order: 1;
+          }
+          
+          &.right {
+            order: 3;
+          }
+          
+          .level-image-small {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+          }
+        }
+        
+        .progress-wrapper {
+          flex: 1;
+          order: 2;
+          position: relative;
+          
+          .progress-bar {
+            height: 12px;
+            background-color: #e5e7eb;
+            border-radius: 6px;
+            overflow: visible;
+            position: relative;
+            margin-bottom: 0.5rem;
+            
+            .progress-fill {
+              height: 100%;
+              background-color: $primary-color;
+              border-radius: 6px;
+              transition: width 0.5s ease;
+              position: relative;
+              
+              .progress-percentage {
+                position: absolute;
+                right: 0;
+                top: -40px;
+                background: $primary-color;
+                color: white;
+                padding: 5px 12px;
+                border-radius: 14px;
+                font-size: 0.9rem;
+                font-weight: bold;
+                white-space: nowrap;
+                transform: translateX(50%);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                z-index: 2;
+                
+                &::after {
+                  content: '';
+                  position: absolute;
+                  bottom: -8px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  width: 0;
+                  height: 0;
+                  border-left: 8px solid transparent;
+                  border-right: 8px solid transparent;
+                  border-top: 8px solid $primary-color;
+                }
+              }
+            }
+          }
+          
+          .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            opacity: 0.8;
+          }
+        }
+      }
+      
+      .next-level-title {
+        text-align: center;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        
+        .level-name-small {
+          font-weight: 500;
+          color: $primary-color;
+        }
+      }
+      
+      .progress-info {
+        margin: 0.5rem 0 0 0;
+        text-align: center;
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+    }
+  }
+
   // Responsive improvements
   @media (max-width: 768px) {
     .side-by-side-section {
@@ -575,7 +672,52 @@ $info-color: #3b82f6;
           gap: 1rem;
 
           .logout-container {
-            align-self: flex-end;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+          }
+        }
+      }
+    }
+
+    .level-section {
+      .level-content {
+        .current-level-header {
+          margin-bottom: 2.5rem;
+          
+          .level-image-large {
+            width: 80px;
+            height: 80px;
+          }
+        }
+        
+        .level-progress-container {
+          gap: 0.5rem;
+          
+          .level-logo {
+            .level-image-small {
+              width: 32px;
+              height: 32px;
+            }
+          }
+          
+          .progress-wrapper {
+            .progress-bar {
+              .progress-fill {
+                .progress-percentage {
+                  font-size: 0.8rem;
+                  padding: 4px 10px;
+                  top: -35px;
+                  
+                  &::after {
+                    bottom: -6px;
+                    border-left: 6px solid transparent;
+                    border-right: 6px solid transparent;
+                    border-top: 6px solid $primary-color;
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -593,16 +735,6 @@ $info-color: #3b82f6;
         flex-direction: column;
         gap: 1rem;
         text-align: center;
-      }
-    }
-
-    .level-section {
-      .level-content {
-        .level-progress-header {
-          flex-direction: column;
-          gap: 1rem;
-          text-align: center;
-        }
       }
     }
   }
@@ -668,4 +800,165 @@ $info-color: #3b82f6;
   font-weight: 600;
   text-align: center;
   color: $primary-color;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.profile-header {
+  .profile-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    justify-content: center; // Markazga tekislash
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .user-info {
+      flex: 1;
+      position: relative;
+      text-align: center; // Matnni markazga joylash
+
+      .user-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center; // Markazga tekislash
+        margin-bottom: 0.5rem;
+        
+        .user-name-container {
+          width: 100%; // Kenglikni to'liq egallash
+        }
+      }
+
+      .stats {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center; // Statistikani markazga joylash
+        
+        @media (max-width: 480px) {
+          gap: 1rem;
+        }
+      }
+    }
+
+    .logout-container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      
+      @media (max-width: 768px) {
+        top: 0.5rem;
+        right: 0.5rem;
+      }
+
+      .three-dots {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        font-size: 0.9rem; // Kichikroq shrift
+        padding: 0.4rem; // Kichikroq padding
+        border-radius: 50%;
+        width: 36px; // Kichikroq kenglik
+        height: 36px; // Kichikroq balandlik
+        cursor: pointer;
+        transition: background 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+        
+        i {
+          font-size: 1rem; // Kichikroq icon
+        }
+      }
+
+      .logout-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        padding: 0.4rem; // Kichikroq padding
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 100;
+        min-width: 160px; // Kichikroq kenglik
+
+        button {
+          width: 100%;
+          background: $danger-color;
+          color: white;
+          border: none;
+          padding: 0.6rem; // Kichikroq padding
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: 500;
+          transition: background 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center; // Markazga tekislash
+          gap: 0.5rem;
+          font-size: 0.9rem; // Kichikroq shrift
+          
+          &:hover {
+            background: darken($danger-color, 10%);
+          }
+          
+          i {
+            font-size: 0.9rem; // Kichikroq icon
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobil moslashtirish
+@media (max-width: 768px) {
+  .profile-header {
+    .profile-info {
+      .logout-container {
+        .three-dots {
+          width: 32px;
+          height: 32px;
+          font-size: 0.8rem;
+          
+          i {
+            font-size: 0.9rem;
+          }
+        }
+        
+        .logout-dropdown {
+          min-width: 140px;
+          
+          button {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
 }

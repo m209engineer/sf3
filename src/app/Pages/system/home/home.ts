@@ -51,8 +51,8 @@ export class Home implements OnInit {
     { name: 'Guru', xp: 300 },
     { name: 'Master', xp: 360 },
     { name: 'Grandmaster', xp: 430 },
-    { name: 'Legend 3', xp: 500 },
-    { name: 'Legend 2', xp: 750 },
+    { name: 'Legend3', xp: 500 },
+    { name: 'Legend2', xp: 750 },
     { name: 'Legend 1', xp: 1000 }
 
   ];
