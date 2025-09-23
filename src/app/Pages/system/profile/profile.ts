@@ -52,7 +52,7 @@ export class Profile implements OnInit {
     { name: 'Expert', xp: 250, image: 'Expert.png' },
     { name: 'Guru', xp: 300, image: 'Guru.png' },
     { name: 'Master', xp: 360, image: 'Master.png' },
-    { name: 'GrandMaster', xp: 430, image: 'GrandMaster.png' },
+    { name: 'GrandMaster', xp: 430, image: 'Grandmaster.png' },
     { name: 'Legend', xp: 500, image: 'Legend.png' }
   ];
 
