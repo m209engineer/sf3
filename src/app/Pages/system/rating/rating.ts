@@ -62,7 +62,7 @@ export class Rating implements OnInit {
     { name: 'Expert', xp: 250 },
     { name: 'Guru', xp: 300 },
     { name: 'Master', xp: 360 },
-    { name: 'GrandMaster', xp: 430 },
+    { name: 'Grandmaster', xp: 430 },
     { name: 'Legend', xp: 500 }
   ];
 
