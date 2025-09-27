@@ -53,7 +53,10 @@ export class Profile implements OnInit {
     { name: 'Guru', xp: 300, image: 'Guru.png' },
     { name: 'Master', xp: 360, image: 'Master.png' },
     { name: 'GrandMaster', xp: 430, image: 'Grandmaster.png' },
-    { name: 'Legend', xp: 500, image: 'Legend.png' }
+    { name: 'Legend 3', xp: 500, image: 'Legend3.png' },
+    { name: 'Legend 2', xp: 750, image: 'Legend2.png' },
+    { name: 'Legend 1', xp: 1000, image: 'Legend1.png' }
+
   ];
 
   // Oylik ma'lumotlar (darslar soni va uy vazifa berilgan darslar soni)
