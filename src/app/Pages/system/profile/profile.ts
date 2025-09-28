@@ -62,7 +62,7 @@ export class Profile implements OnInit {
   // Oylik ma'lumotlar (darslar soni va uy vazifa berilgan darslar soni)
   monthDetails: { [key: string]: { totalLessons: number, homeworkLessons: number } } = {
     "2025-08": { totalLessons: 0, homeworkLessons: 0 },
-    "2025-09": { totalLessons: 14, homeworkLessons: 7 }
+    "2025-09": { totalLessons: 15, homeworkLessons: 7 }
   };
 
   currentMonth = '2025-09'; // Joriy oy
