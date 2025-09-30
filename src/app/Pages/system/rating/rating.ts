@@ -63,7 +63,9 @@ export class Rating implements OnInit {
     { name: 'Guru', xp: 300 },
     { name: 'Master', xp: 360 },
     { name: 'Grandmaster', xp: 430 },
-    { name: 'Legend', xp: 500 }
+    { name: 'Legend3', xp: 500 },
+    { name: 'Legend2', xp: 750 },
+    { name: 'Legend1', xp: 1000 }
   ];
 
   sortOptions = [
