@@ -260,12 +260,47 @@ getAverageHomeworkScore(): number {
   return Math.round((totalHomeworkScore / totalHomeworkCount) * 10) / 10; // 1 xona aniqlikda
 }
 
-  // Reytingdagi o'rinni hisoblash (barcha o'quvchilar orasida)
-  getRankPosition(): number {
-    // Bu metod reyting ma'lumotlarini hisoblab, o'quvchining o'rnini qaytaradi
-    // Hozircha demo ma'lumot
-    return 5; // Masalan, 5-o'rin
+// Reytingdagi o'rinni hisoblash (barcha o'quvchilar orasida)
+getRankPosition(): number {
+  try {
+    const students: Student[] = (studentsData as any).default || studentsData;
+    const studentId = localStorage.getItem('studentId') || '3';
+    const currentStudentId = parseInt(studentId);
+    
+    // Barcha o'quvchilarning umumiy XP larini hisoblaymiz
+    const studentsWithTotalXP = students.map(student => {
+      let totalXP = 0;
+      
+      // Har bir o'quvchining barcha oylaridagi XP ni hisoblaymiz
+      for (const monthKey of Object.keys(student.months)) {
+        const monthData = student.months[monthKey];
+        totalXP += monthData.davomat;
+        totalXP += monthData.uy_vazifa;
+        totalXP += monthData.tasks;
+        totalXP -= monthData.jarima;
+      }
+      
+      return {
+        id: student.id,
+        name: student.name,
+        totalXP: totalXP
+      };
+    });
+    
+    // O'quvchilarni XP bo'yicha kamayish tartibida saralaymiz
+    studentsWithTotalXP.sort((a, b) => b.totalXP - a.totalXP);
+    
+    // Joriy o'quvchining o'rnini topamiz
+    const currentStudentIndex = studentsWithTotalXP.findIndex(student => student.id === currentStudentId);
+    
+    // Index 0-based, shuning uchun +1 qilamiz
+    return currentStudentIndex !== -1 ? currentStudentIndex + 1 : studentsWithTotalXP.length + 1;
+    
+  } catch (error) {
+    console.error('Error calculating rank position:', error);
+    return 5; // Fallback qiymat
   }
+}
 
   // Joriy oy uchun davomat ballini hisoblash
   getCurrentMonthAttendanceScore(): number {
