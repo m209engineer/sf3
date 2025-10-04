@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
-// last updated in 30.09.2025 11:32
+// last updated in 04.10.2025 15:19
 
 
 interface Student {
