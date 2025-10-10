@@ -21,6 +21,11 @@ interface Student {
   };
 }
 
+// O'quvchilarning chiqarib tashlangan oylarini saqlash uchun interface
+interface ExcludedMonths {
+  [studentId: number]: string[]; // studentId -> excluded month keys array
+}
+
 interface Level {
   name: string;
   xp: number;
@@ -36,10 +41,17 @@ interface Level {
 export class Profile implements OnInit {
   student: Student | null = null;
   showLogoutButton = false;
+
+
+    // O'quvchilarning chiqarib tashlangan oylari
+  private excludedMonths: ExcludedMonths = {
+    //3: ['2025-09'], // Ibrohimjon sentyabr oyidan voz kechdi
+    //Boshqa o'quvchilar ham qo'shiladi
+  };
   
   levels: Level[] = [
-    { name: 'Yalqov', xp: -100, image: 'Yalqov.png' },
-    { name: 'Maymuncha', xp: -1, image: 'Maymuncha.png' },
+    { name: 'Yalqov', xp: -1000, image: 'Yalqov.png' },
+    { name: 'Maymuncha', xp: -100, image: 'Maymuncha.png' },
     { name: 'Beginner', xp: 0, image: 'Beginner.png' },
     { name: 'Novice', xp: 10, image: 'Novice.png' },
     { name: 'Junior', xp: 20, image: 'Junior.png' },
@@ -63,7 +75,7 @@ export class Profile implements OnInit {
   monthDetails: { [key: string]: { totalLessons: number, homeworkLessons: number } } = {
     "2025-08": { totalLessons: 0, homeworkLessons: 0 },
     "2025-09": { totalLessons: 16, homeworkLessons: 7 },
-    "2025-10": { totalLessons: 1, homeworkLessons: 0 }
+    "2025-10": { totalLessons: 3, homeworkLessons: 1 }
   };
 
   currentMonth = '2025-09'; // Joriy oy
@@ -119,18 +131,16 @@ export class Profile implements OnInit {
     window.location.href = '/login';
   }
 
-  // XP asosida darajani aniqlash
   getCurrentLevel(): Level {
     const totalXP = this.calculateTotalXP();
     
-    // Eng yuqori darajani topish
     for (let i = this.levels.length - 1; i >= 0; i--) {
       if (totalXP >= this.levels[i].xp) {
         return this.levels[i];
       }
     }
     
-    return this.levels[0]; // Eng past daraja
+    return this.levels[0];
   }
 
   getNextLevel(): Level | null {
@@ -141,7 +151,7 @@ export class Profile implements OnInit {
       return this.levels[currentIndex + 1];
     }
     
-    return null; // Oxirgi darajada
+    return null;
   }
 
 
@@ -154,9 +164,8 @@ export class Profile implements OnInit {
     return Object.keys(this.student.months);
   }
 
-  // profile.component.ts - formatMonth funksiyasini qo'shing
+
   formatMonth(monthKey: string): string {
-    // Month key format: "2025-M09"
     const [year, month] = monthKey.split('-');
     const monthNum = parseInt(month.replace('M', ''), 10);
     
@@ -179,11 +188,14 @@ export class Profile implements OnInit {
     return this.getMonths().length;
   }
 
+  // Umumiy tasks (faqat hisobga olingan oylar)
   getTotalTasks(): number {
     if (!this.student || !this.student.months) return 0;
     
     let totalTasks = 0;
-    for (const monthKey of Object.keys(this.student.months)) {
+    const includedMonths = this.getIncludedMonths();
+    
+    for (const monthKey of includedMonths) {
       const monthData = this.student.months[monthKey];
       totalTasks += monthData.tasks;
     }
@@ -392,27 +404,9 @@ getRankPosition(): number {
     return this.levels[0];
   }
 
-// Umumiy XP ni hisoblash (soddalashtirilgan versiya)
-calculateTotalXP(): number {
-  if (!this.student || !this.student.months) return 0;
-  
-  let totalXP = 0;
-  
-  for (const monthKey of Object.keys(this.student.months)) {
-    const monthData = this.student.months[monthKey];
-    
-    // Barcha ballarni qo'shamiz
-    totalXP += monthData.davomat;    // Davomat ballari
-    totalXP += monthData.uy_vazifa;  // Uy vazifa ballari  
-    totalXP += monthData.tasks;      // Topshiriq ballari
-    totalXP -= monthData.jarima;     // Jarimani ayiramiz
-  }
-  
-  return totalXP;
-}
 
-  // Umumiy davomat XP sini hisoblash
-  getAttendanceXP(): number {
+    // BUTUN DAVR - Barcha oylar hisoblansin
+  getTotalAttendanceXP(): number {
     if (!this.student || !this.student.months) return 0;
     
     let totalXP = 0;
@@ -422,13 +416,110 @@ calculateTotalXP(): number {
     }
     return totalXP;
   }
-
-  // Umumiy uy vazifa XP sini hisoblash
-  getHomeworkXP(): number {
+  getTotalHomeworkXP(): number {
     if (!this.student || !this.student.months) return 0;
     
     let totalXP = 0;
     for (const monthKey of Object.keys(this.student.months)) {
+      const monthData = this.student.months[monthKey];
+      totalXP += monthData.uy_vazifa;
+    }
+    return totalXP;
+  }
+  getTotalTasksXP(): number {
+    if (!this.student || !this.student.months) return 0;
+    
+    let totalTasks = 0;
+    for (const monthKey of Object.keys(this.student.months)) {
+      const monthData = this.student.months[monthKey];
+      totalTasks += monthData.tasks;
+    }
+    return totalTasks;
+  }
+  getTotalPenaltyXP(): number {
+    if (!this.student || !this.student.months) return 0;
+    
+    let totalPenalty = 0;
+    for (const monthKey of Object.keys(this.student.months)) {
+      const monthData = this.student.months[monthKey];
+      totalPenalty += monthData.jarima;
+    }
+    return totalPenalty;
+  }
+
+
+  // O'quvchining voz kechgan oylarini olish
+  getExcludedMonths(): string[] {
+    if (!this.student) return [];
+    return this.excludedMonths[this.student.id] || [];
+  }
+
+  // Voz kechilgan oylardagi jami XP
+  getExcludedMonthsXP(): number {
+    if (!this.student) return 0;
+    
+    const excludedMonths = this.getExcludedMonths();
+    let totalExcludedXP = 0;
+    
+    for (const monthKey of excludedMonths) {
+      const monthData = this.student.months[monthKey];
+      if (monthData) {
+        totalExcludedXP += monthData.davomat + monthData.uy_vazifa + monthData.tasks - monthData.jarima;
+      }
+    }
+    
+    return totalExcludedXP;
+  }
+    // ========== HTML UCHUN YANGI METHODLAR ==========
+
+  // Voz kechilgan oylar ro'yxatini formatlangan ko'rinishda olish
+  getFormattedExcludedMonths(): string {
+    const excludedMonths = this.getExcludedMonths();
+    if (excludedMonths.length === 0) return '';
+    
+    return excludedMonths.map(month => this.formatMonthDisplay(month)).join(', ');
+  }
+
+  // Hisobga olinadigan oylarni olish (excluded oylarsiz)
+  getIncludedMonths(): string[] {
+    if (!this.student || !this.student.months) return [];
+    
+    const allMonths = Object.keys(this.student.months);
+    const excludedMonths = this.getExcludedMonths();
+    
+    return allMonths.filter(month => !excludedMonths.includes(month));
+  }
+
+  // Jami XP (butun davr minus voz kechilgan oylar)
+  calculateTotalXP(): number {
+    const totalAllMonths = this.getTotalAttendanceXP() + this.getTotalHomeworkXP() + 
+                          this.getTotalTasksXP() - this.getTotalPenaltyXP();
+    const excludedXP = this.getExcludedMonthsXP();
+    
+    return totalAllMonths - excludedXP;
+  }
+  // Umumiy davomat XP (faqat hisobga olingan oylar)
+  getAttendanceXP(): number {
+    if (!this.student || !this.student.months) return 0;
+    
+    let totalXP = 0;
+    const includedMonths = this.getIncludedMonths();
+    
+    for (const monthKey of includedMonths) {
+      const monthData = this.student.months[monthKey];
+      totalXP += monthData.davomat;
+    }
+    return totalXP;
+  }
+
+  // Umumiy uy vazifa XP (faqat hisobga olingan oylar)
+  getHomeworkXP(): number {
+    if (!this.student || !this.student.months) return 0;
+    
+    let totalXP = 0;
+    const includedMonths = this.getIncludedMonths();
+    
+    for (const monthKey of includedMonths) {
       const monthData = this.student.months[monthKey];
       totalXP += monthData.uy_vazifa;
     }
@@ -447,9 +538,18 @@ calculateTotalXP(): number {
     return Math.min(10, Math.round(averageHomework));
   }
 
+  // Umumiy jarima (faqat hisobga olingan oylar)
   getTotalPenalty(): number {
     if (!this.student || !this.student.months) return 0;
-    return Object.values(this.student.months).reduce((sum, month) => sum + (month.jarima || 0), 0);
+    
+    let totalPenalty = 0;
+    const includedMonths = this.getIncludedMonths();
+    
+    for (const monthKey of includedMonths) {
+      const monthData = this.student.months[monthKey];
+      totalPenalty += monthData.jarima;
+    }
+    return totalPenalty;
   }
 
   calculateMonthTotal(monthKey: string): number {

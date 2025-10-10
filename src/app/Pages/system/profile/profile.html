@@ -258,22 +258,34 @@
       <section class="xp-section card">
         <h2>🧮 XP Hisoboti</h2>
         <div class="xp-details">
+          <!-- Butun davr ma'lumotlari -->
           <div class="xp-item">
             <span class="xp-label">Davomatdan:</span>
-            <span class="xp-value">+{{ getAttendanceXP() }} XP</span>
+            <span class="xp-value">+{{ getTotalAttendanceXP() }} XP</span>
           </div>
           <div class="xp-item">
             <span class="xp-label">Uy vazifasidan:</span>
-            <span class="xp-value">+{{ getHomeworkXP() }} XP</span>
+            <span class="xp-value">+{{ getTotalHomeworkXP() }} XP</span>
           </div>
           <div class="xp-item">
             <span class="xp-label">Topshiriqlardan:</span>
-            <span class="xp-value">+{{ getTotalTasks() }} XP</span>
+            <span class="xp-value">+{{ getTotalTasksXP() }} XP</span>
           </div>
           <div class="xp-item">
             <span class="xp-label">Jarimalar:</span>
-            <span class="xp-value">-{{ getTotalPenalty() }} XP</span>
+            <span class="xp-value">-{{ getTotalPenaltyXP() }} XP</span>
           </div>
+          
+          <!-- Voz kechilgan oylar (agar mavjud bo'lsa) -->
+          <div class="xp-item excluded" *ngIf="getExcludedMonths().length > 0">
+            <span class="xp-label">Voz kechilgan oylar:</span>
+            <span class="xp-value">-{{ getExcludedMonthsXP() }} XP</span>
+            <span class="excluded-months-list">
+              ({{ getFormattedExcludedMonths() }})
+            </span>
+          </div>
+          
+          <!-- Jami XP -->
           <div class="xp-item total">
             <span class="xp-label">Jami XP:</span>
             <span class="xp-value">{{ calculateTotalXP() }} XP</span>

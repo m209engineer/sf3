@@ -26,6 +26,10 @@ interface RankingItem {
   rank: number;
   level: string;
 }
+// O'quvchilarning chiqarib tashlangan oylarini saqlash uchun interface
+interface ExcludedMonths {
+  [studentId: number]: string[]; // studentId -> excluded month keys array
+}
 
 @Component({
   selector: 'app-rating',
@@ -75,6 +79,12 @@ export class Rating implements OnInit {
     { value: 'tasks', label: 'Topshiriq' },
     { value: 'jarima', label: 'Jarima' }
   ];
+
+    // O'quvchilarning chiqarib tashlangan oylari
+  private excludedMonths: ExcludedMonths = {
+    //3: ['2025-09'], // Ibrohimjon sentyabr oyidan voz kechdi
+    // Boshqa o'quvchilar ham qo'shiladi
+  };
 
   availableMonths: string[] = [];
 
@@ -180,17 +190,51 @@ export class Rating implements OnInit {
     this.availableMonths = Array.from(allMonths).sort();
   }
 
+  // O'quvchining voz kechgan oylarini olish
+  private getExcludedMonths(studentId: number): string[] {
+    return this.excludedMonths[studentId] || [];
+  }
+
+    // Voz kechilgan oylardagi jami XP ni hisoblash
+  private getExcludedMonthsXP(student: Student): number {
+    const excludedMonths = this.getExcludedMonths(student.id);
+    let totalExcludedXP = 0;
+    
+    for (const monthKey of excludedMonths) {
+      const monthData = student.months[monthKey];
+      if (monthData) {
+        totalExcludedXP += monthData.davomat + monthData.uy_vazifa + monthData.tasks - monthData.jarima;
+      }
+    }
+    
+    return totalExcludedXP;
+  }
+    // Hisobga olinadigan oylarni olish (excluded oylarsiz)
+  private getIncludedMonths(student: Student): string[] {
+    const allMonths = Object.keys(student.months);
+    const excludedMonths = this.getExcludedMonths(student.id);
+    
+    return allMonths.filter(month => !excludedMonths.includes(month));
+  }
+
+  // ========== YANGILANGAN METHODLAR ==========
+
   private calculateRanking() {
     this.ranking = this.students.map(student => {
       let totalXP = 0;
+      
       if (this.selectedMonth) {
+        // Oy filterida - barcha ma'lumotlar to'liq
         const monthData = student.months[this.selectedMonth];
         if (monthData) {
           totalXP = monthData.davomat + monthData.uy_vazifa + monthData.tasks - (monthData.jarima || 0);
         }
       } else {
-        totalXP = Object.values(student.months).reduce((sum, month) => {
-          return sum + (month.davomat + month.uy_vazifa + month.tasks - (month.jarima || 0));
+        // Umumiy filterda - voz kechilgan oylar chiqariladi
+        const includedMonths = this.getIncludedMonths(student);
+        totalXP = includedMonths.reduce((sum, monthKey) => {
+          const monthData = student.months[monthKey];
+          return sum + (monthData.davomat + monthData.uy_vazifa + monthData.tasks - (monthData.jarima || 0));
         }, 0);
       }
       
@@ -246,16 +290,33 @@ export class Rating implements OnInit {
   }
 
   private getTotalMetric(months: { [key: string]: MonthData }, type: string): number {
-    return Object.values(months).reduce((sum, month) => {
-      switch (type) {
-        case 'davomat': return sum + month.davomat;
-        case 'uy_vazifa': return sum + month.uy_vazifa;
-        case 'tasks': return sum + month.tasks;
-        case 'jarima': return sum + (month.jarima || 0);
-        case 'total': return sum + (month.davomat + month.uy_vazifa + month.tasks - (month.jarima || 0));
-        default: return sum;
+    // Agar umumiy filter bo'lsa, faqat hisobga olingan oylar
+    if (!this.selectedMonth) {
+      const student = this.students.find(s => JSON.stringify(s.months) === JSON.stringify(months));
+      if (student) {
+        const includedMonths = this.getIncludedMonths(student);
+        return includedMonths.reduce((sum, monthKey) => {
+          const month = months[monthKey];
+          return sum + this.getSingleMetricValue(month, type);
+        }, 0);
       }
+    }
+    
+    // Oy filterida yoki boshqa holatlarda - barcha oylar
+    return Object.values(months).reduce((sum, month) => {
+      return sum + this.getSingleMetricValue(month, type);
     }, 0);
+  }
+
+    private getSingleMetricValue(month: MonthData, type: string): number {
+    switch (type) {
+      case 'davomat': return month.davomat;
+      case 'uy_vazifa': return month.uy_vazifa;
+      case 'tasks': return month.tasks;
+      case 'jarima': return month.jarima || 0;
+      case 'total': return month.davomat + month.uy_vazifa + month.tasks - (month.jarima || 0);
+      default: return 0;
+    }
   }
 
   // XP ga qarab daraja nomini topish
@@ -330,12 +391,20 @@ export class Rating implements OnInit {
     this.calculateRanking();
   }
 
+  // HTML uchun - har doim to'liq ma'lumot (voz kechilgan oyllar ham)
   getTotal(student: Student, type: string): number {
     if (this.selectedMonth) {
       const month = student.months[this.selectedMonth];
       return this.getMetricValue(month, type);
     } else {
-      return this.getTotalMetric(student.months, type);
+      // Umumiy filterda ham ko'rinishda to'liq ma'lumot
+      return this.getAllMonthsMetric(student.months, type);
     }
+  }
+    // Barcha oyllar uchun metrikani hisoblash (ko'rinish uchun)
+  private getAllMonthsMetric(months: { [key: string]: MonthData }, type: string): number {
+    return Object.values(months).reduce((sum, month) => {
+      return sum + this.getSingleMetricValue(month, type);
+    }, 0);
   }
 }
