@@ -6,11 +6,15 @@
     "password": "48392",
     "image": "Abduvali.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": ["2025-09"],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 83, "jarima": 57 },
       "2025-09": { "davomat": 130, "uy_vazifa": 45, "tasks": 892, "jarima": 1018 },
-      "2025-10": { "davomat": 10, "uy_vazifa": 0, "tasks": 0, "jarima": 30 }
-    }
+      "2025-10": { "davomat": 20, "uy_vazifa": 0, "tasks": 0, "jarima": 190 }
+    },
+    "inventory": []
   },
   {
     "id": 2,
@@ -19,11 +23,15 @@
     "password": "75021",
     "image": "Elshodbek.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": [],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 68, "jarima": 53 },
       "2025-09": { "davomat": 100, "uy_vazifa": 70, "tasks": 786, "jarima": 768 },
-      "2025-10": { "davomat": 20, "uy_vazifa": 30, "tasks": 220, "jarima": 170 }
-    }
+      "2025-10": { "davomat": 30, "uy_vazifa": 40, "tasks": 220, "jarima": 320 }
+    },
+    "inventory": []
   },
   {
     "id": 3,
@@ -32,11 +40,15 @@
     "password": "12946",
     "image": "Ibrohimjon.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": ["2025-09"],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 78, "jarima": 78 },
       "2025-09": { "davomat": 140, "uy_vazifa": 45, "tasks": 706, "jarima": 638 },
-      "2025-10": { "davomat": 30, "uy_vazifa": 10, "tasks": 120, "jarima": 190 }
-    }
+      "2025-10": { "davomat": 40, "uy_vazifa": 20, "tasks": 120, "jarima": 340 }
+    },
+    "inventory": []
   },
   {
     "id": 4,
@@ -45,11 +57,15 @@
     "password": "67385",
     "image": "Ziyodulloh.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": ["2025-09"],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 80, "jarima": 38 },
       "2025-09": { "davomat": 120, "uy_vazifa": 45, "tasks": 879, "jarima": 523 },
-      "2025-10": { "davomat": 20, "uy_vazifa": 30, "tasks": 340, "jarima": 170 }
-    }
+      "2025-10": { "davomat": 30, "uy_vazifa": 40, "tasks": 340, "jarima": 170 }
+    },
+    "inventory": []
   },
   {
     "id": 5,
@@ -58,11 +74,15 @@
     "password": "30417",
     "image": "Elnurbek.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": [],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 88, "jarima": 51 },
       "2025-09": { "davomat": 140, "uy_vazifa": 35, "tasks": 470, "jarima": 748 },
       "2025-10": { "davomat": 10, "uy_vazifa": 0, "tasks": 0, "jarima": 20 }
-    }
+    },
+    "inventory": []
   },
   {
     "id": 6,
@@ -71,11 +91,15 @@
     "password": "89234",
     "image": "Sanjarbek.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": ["2025-09"],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 101, "jarima": 56 },
       "2025-09": { "davomat": 70, "uy_vazifa": 20, "tasks": 727, "jarima": 598 },
-      "2025-10": { "davomat": 10, "uy_vazifa": 0, "tasks": 0, "jarima": 180 }
-    }
+      "2025-10": { "davomat": 20, "uy_vazifa": 0, "tasks": 0, "jarima": 190 }
+    },
+    "inventory": []
   },
   {
     "id": 7,
@@ -84,11 +108,15 @@
     "password": "59111",
     "image": "Behruzbek.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": [],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 82, "jarima": 46 },
       "2025-09": { "davomat": 120, "uy_vazifa": 65, "tasks": 806, "jarima": 678 },
-      "2025-10": { "davomat": 20, "uy_vazifa": 10, "tasks": 170, "jarima": 170 }
-    }
+      "2025-10": { "davomat": 30, "uy_vazifa": 20, "tasks": 170, "jarima": 320 }
+    },
+    "inventory": []
   },
   {
     "id": 8,
@@ -97,10 +125,17 @@
     "password": "94103",
     "image": "Yahyobek.jpg",
     "level": "OK",
+    "coins": 0,
+    "convertedXP": 0,
+    "excludedMonths": [],
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 68, "jarima": 29 },
       "2025-09": { "davomat": 150, "uy_vazifa": 40, "tasks": 663, "jarima": 688 },
-      "2025-10": { "davomat": 20, "uy_vazifa": 10, "tasks": 0, "jarima": 160 }
-    }
+      "2025-10": { "davomat": 30, "uy_vazifa": 10, "tasks": 0, "jarima": 320 }
+    },
+    "inventory": []
   }
 ]
+
+
+

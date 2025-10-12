@@ -1,0 +1,274 @@
+<div class="market-container">
+  <!-- Mini Coin Card -->
+  <div *ngIf="showMiniCoinCard" class="mini-coin-card">
+    <div class="mini-coin-content">
+      <div class="coin-icon-mini">
+        <img src="assets/coin.png" alt="Coin" class="coin-img">
+      </div>
+      <span class="coin-amount-mini">{{ currentStudent?.coins || 0 }}</span>
+    </div>
+  </div>
+
+  <!-- Basic Info Card - Kichik va ingichka -->
+  <div class="basic-info-card" [class.hidden]="showMiniCoinCard">
+    <div class="card-background-animation"></div>
+    
+    <div class="basic-info-content">
+      <div class="student-main-info">
+        <div class="avatar-container">
+          <img [src]="currentStudent?.image" [alt]="currentStudent?.name" class="student-avatar">
+          <div class="online-dot"></div>
+        </div>
+        
+        <div class="student-basic-details">
+          <div class="name-level">
+            <h3 class="student-name">{{ currentStudent?.name }}</h3>
+            <span class="level-badge">{{ getLevelName() }}</span>
+          </div>
+          
+          <div class="quick-stats">
+            <div class="quick-stat">
+              <span class="stat-icon">💰</span>
+              <span class="stat-value">{{ currentStudent?.coins || 0 }}</span>
+            </div>
+            <div class="quick-stat">
+              <span class="stat-icon">⭐</span>
+              <span class="stat-value">{{ currentStudent ? calculateTotalXP(currentStudent) : 0 }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="convert-section">
+        <button 
+          class="convert-btn" 
+          (click)="openConvertModal()"
+          [class.legend]="isLegend()"
+          [class.disabled]="!isLegend()">
+          
+          <span class="btn-icon">🔄</span>
+          <span class="btn-text">
+            {{ isLegend() ? 'Convert' : 'Legend' }}
+          </span>
+          <div class="btn-glow"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Convert Modal -->
+  <div *ngIf="showConvertModal" class="modal-overlay" (click)="closeConvertModal()">
+    <div class="convert-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <button class="back-btn" (click)="closeConvertModal()">
+          <span class="back-icon">←</span>
+          Orqaga
+        </button>
+        <h3>XP → Tanga</h3>
+        <button class="close-btn" (click)="closeConvertModal()">
+          <span class="close-icon">×</span>
+        </button>
+      </div>
+      
+      <div class="modal-content">
+        <div class="convert-info">
+          <div class="info-card">
+            <div class="info-icon">💡</div>
+            <div class="info-content">
+              <p><strong>100 XP = 1 Tanga</strong></p>
+              <p>Legend darajasi: 1000+ XP</p>
+              <p>Mavjud XP: <strong>{{ getConvertibleXP() }}</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="amount-input">
+          <label for="convertAmount">
+            <span class="label-icon">🎯</span>
+            XP Miqdori
+          </label>
+          <div class="input-container">
+            <input 
+              type="number" 
+              id="convertAmount"
+              [(ngModel)]="convertAmount"
+              [max]="getConvertibleXP()"
+              min="100"
+              step="100"
+              placeholder="100, 200, 300...">
+            <span class="input-suffix">XP</span>
+          </div>
+          <div class="amount-preview">
+            <span class="preview-icon">💰</span>
+            Olasi: <strong>{{ calculateCoins() }}</strong> tanga
+          </div>
+        </div>
+
+        <button 
+          class="generate-btn" 
+          (click)="generateConvertCode()"
+          [disabled]="convertAmount < 100 || convertAmount > getConvertibleXP()">
+          <span class="generate-icon">⚡</span>
+          Kod Yaratish
+        </button>
+
+        <div *ngIf="generatedCode" class="generated-code-section">
+          <div class="instruction">
+            <div class="instruction-icon">📱</div>
+            <p>Kodni nusxalab Telegram botga yuboring</p>
+          </div>
+          
+          <div class="code-card">
+            <div class="code-header">
+              <span class="code-icon">🔐</span>
+              <span>Bot Kodi</span>
+              <button 
+                class="copy-btn"
+                (click)="copyToClipboard(generatedCode)"
+                [class.copied]="isCopied">
+                <span class="copy-icon" [class.hidden]="isCopied">📋</span>
+                <span class="check-icon" [class.hidden]="!isCopied">✅</span>
+                {{ isCopied ? 'Nusxalandi' : 'Nusxa' }}
+              </button>
+            </div>
+            <div class="code-content">
+              <code>{{ generatedCode }}</code>
+            </div>
+          </div>
+
+          <a 
+            [href]="getConvertTelegramLink()" 
+            target="_blank"
+            class="telegram-link">
+            <span class="tg-icon">📱</span>
+            <span class="tg-text">Telegram Bot</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mahsulotlar Bo'limi -->
+  <div class="products-section">
+    <div class="section-header">
+      <h2>
+        <span class="section-icon">🏪</span>
+        Do'kon
+      </h2>
+      
+      <div class="filter-controls">
+        <select (change)="onCategoryChange($event)" class="filter-select">
+          <option value="all">🎁 Barchasi</option>
+          <option value="badge">🎖️ Nishalar</option>
+          <option value="theme">🎨 Mavzular</option>
+          <option value="special">✨ Maxsus</option>
+          <option value="utility">⚡ Foydali</option>
+        </select>
+
+        <select (change)="onSortChange($event)" class="sort-select">
+          <option value="name">🔤 Ism</option>
+          <option value="price-low">💰 Arzon</option>
+          <option value="price-high">💎 Qimmat</option>
+          <option value="rarity">🌟 Nodir</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="products-grid">
+      <div 
+        *ngFor="let product of filteredProducts" 
+        class="product-card"
+        [class.expanded]="expandedProductId === product.id">
+        
+        <div class="product-content">
+          <div class="product-image-container">
+            <div class="product-image">
+              <img [src]="product.image" [alt]="product.name">
+              <div class="image-glow"></div>
+            </div>
+            <div class="rarity-badge" [ngClass]="getProductRarityClass(product.rarity)">
+              {{ product.rarity }}
+            </div>
+          </div>
+
+          <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-description">{{ product.description }}</p>
+            
+            <div class="product-price">
+              <img src="assets/coin.png" alt="Coin" class="price-coin">
+              <span class="price-amount">{{ product.price }}</span>
+            </div>
+
+            <button 
+              class="buy-btn"
+              [class.affordable]="canAffordProduct(product.price)"
+              [class.expensive]="!canAffordProduct(product.price)"
+              (click)="canAffordProduct(product.price) && toggleProductExpansion(product.id)">
+              
+              <span class="buy-icon">
+                <span class="cart-icon" *ngIf="canAffordProduct(product.price)">🛒</span>
+                <span class="lock-icon" *ngIf="!canAffordProduct(product.price)">🔒</span>
+              </span>
+              <span class="buy-text">
+                {{ canAffordProduct(product.price) ? 'Sotib olish' : 'Coin yetmaydi' }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="expandedProductId === product.id && canAffordProduct(product.price)" class="product-expanded">
+          <div class="expanded-content">
+            <div class="purchase-instruction">
+              <div class="instruction-icon">📱</div>
+              <p>Kodni nusxalab Telegram botga yuboring</p>
+            </div>
+            
+            <div class="purchase-code-section">
+              <div class="code-card">
+                <div class="code-header">
+                  <span class="code-icon">🔐</span>
+                  <span>Bot Kodi</span>
+                  <button 
+                    class="copy-btn"
+                    (click)="copyToClipboard(generatedCode)"
+                    [class.copied]="isCopied">
+                    <span class="copy-icon" [class.hidden]="isCopied">📋</span>
+                    <span class="check-icon" [class.hidden]="!isCopied">✅</span>
+                    {{ isCopied ? 'Nusxalandi' : 'Nusxa' }}
+                  </button>
+                </div>
+                <div class="code-content">
+                  <code>{{ generatedCode }}</code>
+                </div>
+              </div>
+
+              <a 
+                [href]="getProductTelegramLink()" 
+                target="_blank"
+                class="telegram-link">
+                <span class="tg-icon">📱</span>
+                <span class="tg-text">Telegram Bot</span>
+              </a>
+              
+              <button class="back-btn-small" (click)="toggleProductExpansion(product.id)">
+                <span class="back-icon">←</span>
+                Orqaga
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredProducts.length === 0" class="no-products">
+      <div class="no-products-content">
+        <div class="no-products-animation">
+          <span class="no-products-icon">📦</span>
+        </div>
+        <h3>Mahsulot topilmadi</h3>
+        <p>Boshqa kategoriyani tanlang</p>
+      </div>
+    </div>
+  </div>
+</div>

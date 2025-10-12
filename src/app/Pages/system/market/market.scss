@@ -1,0 +1,959 @@
+// Variables
+$primary-color: #2563eb;
+$secondary-color: #6b7280;
+$accent-color: #4f46e5;
+$background-light: #f9fafb;
+$text-light: #1f2937;
+$card-light: #ffffff;
+$border-light: #e5e7eb;
+$header-light: #f3f4f6;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$danger-color: #ef4444;
+$info-color: #3b82f6;
+
+// Animatsiyalar
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes slideDown {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-20px); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes backgroundMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+// Asosiy konteyner
+.market-container {
+  min-height: 100vh;
+  background: $background-light;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+// Mini Coin Card
+.mini-coin-card {
+  position: fixed;
+  top: 70px;
+  left: 1rem;
+  z-index: 98;
+  background: $card-light;
+  border: 1px solid $primary-color;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  animation: slideDown 0.3s ease-out;
+  
+  .mini-coin-content {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    
+    .coin-icon-mini {
+      width: 16px;
+      height: 16px;
+      
+      .coin-img {
+        width: 100%;
+        height: 100%;
+        animation: float 2s ease-in-out infinite;
+      }
+    }
+    
+    .coin-amount-mini {
+      font-weight: 600;
+      color: $primary-color;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// Basic Info Card - Kichik va ingichka
+.basic-info-card {
+  background: linear-gradient(135deg, $primary-color, $accent-color);
+  margin: 0.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  transition: all 0.3s ease;
+  animation: slideDown 0.4s ease-out;
+  
+  // Scroll animatsiyasi
+  &.hidden {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+  
+  .card-background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(-45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+    background-size: 400% 400%;
+    animation: backgroundMove 6s ease infinite;
+  }
+  
+  .basic-info-content {
+    position: relative;
+    z-index: 2;
+    padding: 0.75rem;
+    color: white;
+  }
+}
+
+.student-main-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  
+  .avatar-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    overflow: hidden;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    flex-shrink: 0;
+    
+    .student-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .online-dot {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border: 1.5px solid white;
+      border-radius: 50%;
+      animation: glow 2s infinite;
+    }
+  }
+  
+  .student-basic-details {
+    flex: 1;
+    min-width: 0;
+    
+    .name-level {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+      
+      .student-name {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .level-badge {
+        background: rgba(255,255,255,0.2);
+        padding: 0.2rem 0.5rem;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+    }
+    
+    .quick-stats {
+      display: flex;
+      gap: 0.75rem;
+      
+      .quick-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        
+        .stat-icon {
+          font-size: 0.7rem;
+          animation: iconBounce 2s ease-in-out infinite;
+        }
+        
+        .stat-value {
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.convert-section {
+  .convert-btn {
+    width: 100%;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    position: relative;
+    overflow: hidden;
+    
+    &.legend:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-1px);
+    }
+    
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-icon {
+      font-size: 0.8rem;
+      animation: float 2s ease-in-out infinite;
+    }
+    
+    .btn-glow {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    &:hover .btn-glow {
+      left: 100%;
+    }
+  }
+}
+
+// Kompyuterda keng basic info
+@media (min-width: 768px) {
+  .basic-info-card {
+    margin: 1rem auto;
+    max-width: 600px;
+    
+    .basic-info-content {
+      padding: 1rem;
+    }
+    
+    .student-main-info {
+      gap: 1rem;
+      
+      .avatar-container {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .student-basic-details {
+        .name-level {
+          .student-name {
+            font-size: 1rem;
+          }
+        }
+        
+        .quick-stats {
+          gap: 1rem;
+          
+          .quick-stat {
+            .stat-value {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .convert-section .convert-btn {
+      padding: 0.6rem;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Modal Styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.convert-modal {
+  background: $card-light;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  animation: slideDown 0.3s ease;
+  
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid $border-light;
+    background: $header-light;
+    
+    .back-btn {
+      background: none;
+      border: none;
+      color: $primary-color;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      
+      .back-icon {
+        animation: float 2s ease-in-out infinite;
+      }
+    }
+    
+    h3 {
+      margin: 0;
+      color: $text-light;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $secondary-color;
+      padding: 0.3rem;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      
+      &:hover {
+        background: $border-light;
+      }
+    }
+  }
+  
+  .modal-content {
+    padding: 1rem;
+  }
+}
+
+.convert-info {
+  margin-bottom: 1rem;
+  
+  .info-card {
+    background: $header-light;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border-left: 3px solid $primary-color;
+    display: flex;
+    gap: 0.5rem;
+    
+    .info-icon {
+      font-size: 0.9rem;
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+    
+    .info-content {
+      flex: 1;
+      
+      p {
+        margin: 0.2rem 0;
+        color: $text-light;
+        font-size: 0.8rem;
+        line-height: 1.3;
+        
+        strong {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+.amount-input {
+  margin-bottom: 1rem;
+  
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: $text-light;
+    font-size: 0.8rem;
+    
+    .label-icon {
+      animation: float 2s ease-in-out infinite;
+    }
+  }
+  
+  .input-container {
+    position: relative;
+    
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid $border-light;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+    
+    .input-suffix {
+      position: absolute;
+      right: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $secondary-color;
+      font-size: 0.8rem;
+    }
+  }
+  
+  .amount-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    color: $secondary-color;
+    font-size: 0.8rem;
+    
+    .preview-icon {
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+    
+    strong {
+      color: $success-color;
+    }
+  }
+}
+
+.generate-btn {
+  width: 100%;
+  background: $primary-color;
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  
+  &:hover:not(:disabled) {
+    background: darken($primary-color, 8%);
+  }
+  
+  &:disabled {
+    background: $secondary-color;
+    cursor: not-allowed;
+  }
+  
+  .generate-icon {
+    animation: float 1.5s ease-in-out infinite;
+  }
+}
+
+.instruction {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  
+  .instruction-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+    display: block;
+    animation: iconBounce 2s ease-in-out infinite;
+  }
+  
+  p {
+    margin: 0;
+    color: $secondary-color;
+    font-size: 0.8rem;
+  }
+}
+
+.code-card {
+  background: $header-light;
+  border: 1px solid $border-light;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    background: $background-light;
+    border-bottom: 1px solid $border-light;
+    
+    span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-weight: 600;
+      color: $text-light;
+      font-size: 0.8rem;
+    }
+    
+    .code-icon {
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+    
+    .copy-btn {
+      background: $primary-color;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      
+      &.copied {
+        background: $success-color;
+      }
+      
+      &:hover:not(.copied) {
+        background: darken($primary-color, 8%);
+      }
+    }
+  }
+  
+  .code-content {
+    padding: 0.75rem;
+    
+    code {
+      font-family: 'Courier New', monospace;
+      background: $card-light;
+      padding: 0.6rem;
+      border-radius: 4px;
+      display: block;
+      word-break: break-all;
+      color: $text-light;
+      border: 1px solid $border-light;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.telegram-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #0088cc;
+  color: white;
+  text-decoration: none;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  
+  &:hover {
+    background: darken(#0088cc, 8%);
+  }
+  
+  .tg-icon {
+    animation: iconBounce 2s ease-in-out infinite;
+  }
+}
+
+.back-btn-small {
+  width: 100%;
+  background: $secondary-color;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  
+  &:hover {
+    background: darken($secondary-color, 8%);
+  }
+}
+
+// Products Section
+.products-section {
+  padding: 0 0.5rem 1rem 0.5rem;
+  
+  .section-header {
+    margin-bottom: 1rem;
+    
+    h2 {
+      color: $text-light;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      
+      .section-icon {
+        animation: iconBounce 2s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+.filter-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  
+  select {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid $border-light;
+    border-radius: 6px;
+    background: $card-light;
+    color: $text-light;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+}
+
+// Mahsulotlar Grid
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.product-card {
+  background: $card-light;
+  border: 1px solid $border-light;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: $primary-color;
+  }
+  
+  &.expanded {
+    .product-expanded {
+      animation: slideDown 0.3s ease;
+    }
+  }
+  
+  .product-content {
+    display: flex;
+    padding: 0.75rem;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+}
+
+.product-image-container {
+  position: relative;
+  flex-shrink: 0;
+  
+  .product-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid $border-light;
+    background: $header-light;
+    padding: 0.4rem;
+    position: relative;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    
+    .image-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+      border-radius: 6px;
+      animation: glow 3s ease-in-out infinite;
+    }
+  }
+  
+  .rarity-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    padding: 0.2rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    z-index: 2;
+    
+    &.rarity-common { background: $secondary-color; }
+    &.rarity-rare { background: $info-color; }
+    &.rarity-epic { background: $accent-color; }
+    &.rarity-legendary { background: $warning-color; }
+  }
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  
+  .product-name {
+    margin: 0;
+    color: $text-light;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  
+  .product-description {
+    margin: 0;
+    color: $secondary-color;
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+}
+
+.product-price {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.2rem 0;
+  
+  .price-coin {
+    width: 16px;
+    height: 16px;
+    animation: float 2s ease-in-out infinite;
+  }
+  
+  .price-amount {
+    font-weight: 700;
+    color: $text-light;
+    font-size: 0.9rem;
+  }
+}
+
+.buy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+  
+  &.affordable {
+    background: $success-color;
+    color: white;
+    
+    &:hover {
+      background: darken($success-color, 8%);
+    }
+    
+    .cart-icon {
+      animation: float 2s ease-in-out infinite;
+    }
+  }
+  
+  &.expensive {
+    background: $warning-color;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.7;
+    
+    .lock-icon {
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+  }
+}
+
+.product-expanded {
+  background: $header-light;
+  border-top: 1px solid $border-light;
+  
+  .expanded-content {
+    padding: 0.75rem;
+  }
+}
+
+.no-products {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: $secondary-color;
+  grid-column: 1 / -1;
+  
+  .no-products-content {
+    .no-products-animation {
+      .no-products-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+        opacity: 0.5;
+        animation: float 3s ease-in-out infinite;
+      }
+    }
+    
+    h3 {
+      margin: 0 0 0.3rem 0;
+      color: $text-light;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// Responsive improvements
+@media (max-width: 480px) {
+  .basic-info-card {
+    margin: 0.3rem;
+    
+    .basic-info-content {
+      padding: 0.6rem;
+    }
+  }
+  
+  .student-main-info {
+    gap: 0.6rem;
+    
+    .avatar-container {
+      width: 35px;
+      height: 35px;
+    }
+    
+    .student-basic-details {
+      .name-level {
+        .student-name {
+          font-size: 0.8rem;
+        }
+        
+        .level-badge {
+          font-size: 0.65rem;
+          padding: 0.15rem 0.4rem;
+        }
+      }
+      
+      .quick-stats {
+        .quick-stat {
+          .stat-value {
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hidden {
+  display: none !important;
+}

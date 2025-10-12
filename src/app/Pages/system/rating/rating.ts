@@ -2,12 +2,19 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as studentsData from '../../../students.json';
+import * as shopItemsData from '../../../shopItems.json';
 
 interface MonthData {
   davomat: number;
   uy_vazifa: number;
   tasks: number;
   jarima: number;
+}
+
+interface StudentItem {
+  itemId: number;
+  purchaseDate: string;
+  equipped: boolean;
 }
 
 interface Student {
@@ -17,7 +24,11 @@ interface Student {
   password: string;
   image: string;
   level: string;
+  coins: number;
+  convertedXP: number;
+  excludedMonths: string[];
   months: { [key: string]: MonthData };
+  inventory: StudentItem[];
 }
 
 interface RankingItem {
@@ -26,9 +37,16 @@ interface RankingItem {
   rank: number;
   level: string;
 }
-// O'quvchilarning chiqarib tashlangan oylarini saqlash uchun interface
-interface ExcludedMonths {
-  [studentId: number]: string[]; // studentId -> excluded month keys array
+
+interface ShopItem {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: 'badge' | 'theme' | 'special' | 'utility';
+  image: string;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  available: boolean;
 }
 
 @Component({
@@ -39,6 +57,7 @@ interface ExcludedMonths {
 })
 export class Rating implements OnInit {
   students: Student[] = (studentsData as any).default || studentsData;
+  shopItems: ShopItem[] = (shopItemsData as any).default || shopItemsData;
   ranking: RankingItem[] = [];
   currentStudent: Student | null = null;
   selectedSort: string = 'total';
@@ -79,12 +98,6 @@ export class Rating implements OnInit {
     { value: 'tasks', label: 'Topshiriq' },
     { value: 'jarima', label: 'Jarima' }
   ];
-
-    // O'quvchilarning chiqarib tashlangan oylari
-  private excludedMonths: ExcludedMonths = {
-    //3: ['2025-09'], // Ibrohimjon sentyabr oyidan voz kechdi
-    // Boshqa o'quvchilar ham qo'shiladi
-  };
 
   availableMonths: string[] = [];
 
@@ -191,13 +204,13 @@ export class Rating implements OnInit {
   }
 
   // O'quvchining voz kechgan oylarini olish
-  private getExcludedMonths(studentId: number): string[] {
-    return this.excludedMonths[studentId] || [];
+  private getExcludedMonths(student: Student): string[] {
+    return student.excludedMonths || [];
   }
 
-    // Voz kechilgan oylardagi jami XP ni hisoblash
+  // Voz kechilgan oylardagi jami XP ni hisoblash
   private getExcludedMonthsXP(student: Student): number {
-    const excludedMonths = this.getExcludedMonths(student.id);
+    const excludedMonths = this.getExcludedMonths(student);
     let totalExcludedXP = 0;
     
     for (const monthKey of excludedMonths) {
@@ -209,10 +222,11 @@ export class Rating implements OnInit {
     
     return totalExcludedXP;
   }
-    // Hisobga olinadigan oylarni olish (excluded oylarsiz)
+
+  // Hisobga olinadigan oylarni olish (excluded oylarsiz)
   private getIncludedMonths(student: Student): string[] {
     const allMonths = Object.keys(student.months);
-    const excludedMonths = this.getExcludedMonths(student.id);
+    const excludedMonths = this.getExcludedMonths(student);
     
     return allMonths.filter(month => !excludedMonths.includes(month));
   }
@@ -264,8 +278,8 @@ export class Rating implements OnInit {
         aValue = this.getMetricValue(aMonth, this.selectedSort);
         bValue = this.getMetricValue(bMonth, this.selectedSort);
       } else {
-        aValue = this.getTotalMetric(aData, this.selectedSort);
-        bValue = this.getTotalMetric(bData, this.selectedSort);
+        aValue = this.getTotalMetric(a.student, this.selectedSort);
+        bValue = this.getTotalMetric(b.student, this.selectedSort);
       }
 
       if (this.selectedSort === 'jarima') {
@@ -289,26 +303,23 @@ export class Rating implements OnInit {
     }
   }
 
-  private getTotalMetric(months: { [key: string]: MonthData }, type: string): number {
+  private getTotalMetric(student: Student, type: string): number {
     // Agar umumiy filter bo'lsa, faqat hisobga olingan oylar
     if (!this.selectedMonth) {
-      const student = this.students.find(s => JSON.stringify(s.months) === JSON.stringify(months));
-      if (student) {
-        const includedMonths = this.getIncludedMonths(student);
-        return includedMonths.reduce((sum, monthKey) => {
-          const month = months[monthKey];
-          return sum + this.getSingleMetricValue(month, type);
-        }, 0);
-      }
+      const includedMonths = this.getIncludedMonths(student);
+      return includedMonths.reduce((sum, monthKey) => {
+        const month = student.months[monthKey];
+        return sum + this.getSingleMetricValue(month, type);
+      }, 0);
     }
     
     // Oy filterida yoki boshqa holatlarda - barcha oylar
-    return Object.values(months).reduce((sum, month) => {
+    return Object.values(student.months).reduce((sum, month) => {
       return sum + this.getSingleMetricValue(month, type);
     }, 0);
   }
 
-    private getSingleMetricValue(month: MonthData, type: string): number {
+  private getSingleMetricValue(month: MonthData, type: string): number {
     switch (type) {
       case 'davomat': return month.davomat;
       case 'uy_vazifa': return month.uy_vazifa;
@@ -401,10 +412,65 @@ export class Rating implements OnInit {
       return this.getAllMonthsMetric(student.months, type);
     }
   }
-    // Barcha oyllar uchun metrikani hisoblash (ko'rinish uchun)
+
+  // Barcha oyllar uchun metrikani hisoblash (ko'rinish uchun)
   private getAllMonthsMetric(months: { [key: string]: MonthData }, type: string): number {
     return Object.values(months).reduce((sum, month) => {
       return sum + this.getSingleMetricValue(month, type);
     }, 0);
+  }
+
+  // ========== YANGI METHODLAR ==========
+
+  // O'quvchining joriy XP sini olish
+  getCurrentXP(student: Student): number {
+    const includedMonths = this.getIncludedMonths(student);
+    return includedMonths.reduce((sum, monthKey) => {
+      const monthData = student.months[monthKey];
+      return sum + (monthData.davomat + monthData.uy_vazifa + monthData.tasks - (monthData.jarima || 0));
+    }, 0);
+  }
+
+  // Convert qilish mumkin bo'lgan XP ni hisoblash
+  getConvertibleXP(student: Student): number {
+    const currentXP = this.getCurrentXP(student);
+    const legendThreshold = 1000;
+    
+    if (currentXP < legendThreshold) return 0;
+    
+    return currentXP - legendThreshold - student.convertedXP;
+  }
+
+  // Tanga olish uchun link generatsiya qilish
+  generateConvertLink(student: Student, xpAmount: number): string {
+    const baseUrl = 'https://t.me/your_bot';
+    return `${baseUrl}?start=convert_${student.id}_${xpAmount}`;
+  }
+
+  // Sotib olish uchun link generatsiya qilish
+  generatePurchaseLink(student: Student, itemId: number, quantity: number = 1): string {
+    const baseUrl = 'https://t.me/your_bot';
+    return `${baseUrl}?start=purchase_${student.id}_${itemId}_${quantity}`;
+  }
+
+  // Equip uchun link generatsiya qilish
+  generateEquipLink(student: Student, itemId: number): string {
+    const baseUrl = 'https://t.me/your_bot';
+    return `${baseUrl}?start=equip_${student.id}_${itemId}`;
+  }
+
+  // O'quvchining equipped mahsulotlarini olish
+  getEquippedItems(student: Student): StudentItem[] {
+    return student.inventory.filter(item => item.equipped);
+  }
+
+  // Mahsulotning to'liq ma'lumotini olish
+  getShopItem(itemId: number): ShopItem | undefined {
+    return this.shopItems.find(item => item.id === itemId);
+  }
+
+  // O'quvchining tanga balansini tekshirish
+  canAfford(student: Student, price: number): boolean {
+    return student.coins >= price;
   }
 }

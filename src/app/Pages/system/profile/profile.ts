@@ -1,12 +1,19 @@
 // profile.component.ts
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as studentsData from '../../../students.json';
+import * as shopItemsData from '../../../shopItems.json';
 
 interface MonthData {
   davomat: number;
   uy_vazifa: number;
   tasks: number;
   jarima: number;
+}
+
+interface StudentItem {
+  itemId: number;
+  purchaseDate: string;
+  equipped: boolean;
 }
 
 interface Student {
@@ -16,14 +23,24 @@ interface Student {
   password: string;
   image: string;
   level: string;
+  coins: number;
+  convertedXP: number;
+  excludedMonths: string[];
   months: {
     [key: string]: MonthData;
   };
+  inventory: StudentItem[];
 }
 
-// O'quvchilarning chiqarib tashlangan oylarini saqlash uchun interface
-interface ExcludedMonths {
-  [studentId: number]: string[]; // studentId -> excluded month keys array
+interface ShopItem {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: 'badge' | 'theme' | 'special' | 'utility';
+  image: string;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  available: boolean;
 }
 
 interface Level {
@@ -34,21 +51,15 @@ interface Level {
 
 @Component({
   selector: 'app-profile',
-  standalone:false,
+  standalone: false,
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss']
 })
 export class Profile implements OnInit {
   student: Student | null = null;
+  shopItems: ShopItem[] = (shopItemsData as any).default || shopItemsData;
   showLogoutButton = false;
 
-
-    // O'quvchilarning chiqarib tashlangan oylari
-  private excludedMonths: ExcludedMonths = {
-    //3: ['2025-09'], // Ibrohimjon sentyabr oyidan voz kechdi
-    //Boshqa o'quvchilar ham qo'shiladi
-  };
-  
   levels: Level[] = [
     { name: 'Yalqov', xp: -1000, image: 'Yalqov.png' },
     { name: 'Maymuncha', xp: -100, image: 'Maymuncha.png' },
@@ -68,7 +79,6 @@ export class Profile implements OnInit {
     { name: 'Legend 3', xp: 500, image: 'Legend3.png' },
     { name: 'Legend 2', xp: 750, image: 'Legend2.png' },
     { name: 'Legend 1', xp: 1000, image: 'Legend1.png' }
-
   ];
 
   // Oylik ma'lumotlar (darslar soni va uy vazifa berilgan darslar soni)
@@ -110,10 +120,14 @@ export class Profile implements OnInit {
         password: "12946",
         image: "https://avatars.mds.yandex.net/i?id=0e56150aa276e02771636e69480b729e006fdd8f-5221285-images-thumbs&n=13",
         level: "OK",
+        coins: 0,
+        convertedXP: 0,
+        excludedMonths: [],
         months: {
           "2025-08": { davomat: 6, uy_vazifa: 0, tasks: 78, jarima: 78 },
           "2025-09": { davomat: 100, uy_vazifa: 35, tasks: 411, jarima: 458 }
-        }
+        },
+        inventory: []
       };
     }
   }
@@ -154,16 +168,10 @@ export class Profile implements OnInit {
     return null;
   }
 
-
-  
-
-
-
   getMonths(): string[] {
     if (!this.student || !this.student.months) return [];
     return Object.keys(this.student.months);
   }
-
 
   formatMonth(monthKey: string): string {
     const [year, month] = monthKey.split('-');
@@ -202,118 +210,111 @@ export class Profile implements OnInit {
     return totalTasks;
   }
 
-// Umumiy davomat foizini hisoblash
-getTotalAttendancePercentage(): number {
-  if (!this.student || !this.student.months) return 0;
-  
-  let totalAttendedLessons = 0;
-  let totalPossibleLessons = 0;
-  
-  for (const monthKey of Object.keys(this.student.months)) {
-    const monthData = this.student.months[monthKey];
-    const monthInfo = this.monthDetails[monthKey];
+  // Umumiy davomat foizini hisoblash
+  getTotalAttendancePercentage(): number {
+    if (!this.student || !this.student.months) return 0;
     
-    if (monthInfo) {
-      // Har 10 ball 1 darsga teng
-      const attendedLessons = Math.floor(monthData.davomat / 10);
-      totalAttendedLessons += Math.min(attendedLessons, monthInfo.totalLessons);
-      totalPossibleLessons += monthInfo.totalLessons;
-    }
-  }
-  
-  if (totalPossibleLessons === 0) return 0;
-  
-  const percentage = (totalAttendedLessons / totalPossibleLessons) * 100;
-  return Math.min(Math.round(percentage), 100);
-}
-// Umumiy uy vazifa foizini hisoblash
-getTotalHomeworkPercentage(): number {
-  if (!this.student || !this.student.months) return 0;
-  
-  let totalHomeworkScore = 0;
-  let totalMaxHomeworkScore = 0;
-  
-  for (const monthKey of Object.keys(this.student.months)) {
-    const monthData = this.student.months[monthKey];
-    const monthInfo = this.monthDetails[monthKey];
+    let totalAttendedLessons = 0;
+    let totalPossibleLessons = 0;
     
-    if (monthInfo) {
-      totalHomeworkScore += monthData.uy_vazifa;
-      // Har bir uy vazifasi 10 ballik
-      totalMaxHomeworkScore += monthInfo.homeworkLessons * 10;
-    }
-  }
-  
-  if (totalMaxHomeworkScore === 0) return 0;
-  
-  const percentage = (totalHomeworkScore / totalMaxHomeworkScore) * 100;
-  return Math.min(Math.round(percentage), 100);
-}
-// Umumiy uy vazifa o'rtacha bahosini hisoblash (10 ballik tizimda)
-getAverageHomeworkScore(): number {
-  if (!this.student || !this.student.months) return 0;
-  
-  let totalHomeworkScore = 0;
-  let totalHomeworkCount = 0;
-  
-  for (const monthKey of Object.keys(this.student.months)) {
-    const monthData = this.student.months[monthKey];
-    const monthInfo = this.monthDetails[monthKey];
-    
-    if (monthInfo && monthInfo.homeworkLessons > 0) {
-      // O'rtacha bahoni hisoblash
-      const averageScore = monthData.uy_vazifa / monthInfo.homeworkLessons;
-      totalHomeworkScore += averageScore;
-      totalHomeworkCount++;
-    }
-  }
-  
-  if (totalHomeworkCount === 0) return 0;
-  
-  return Math.round((totalHomeworkScore / totalHomeworkCount) * 10) / 10; // 1 xona aniqlikda
-}
-
-// Reytingdagi o'rinni hisoblash (barcha o'quvchilar orasida)
-getRankPosition(): number {
-  try {
-    const students: Student[] = (studentsData as any).default || studentsData;
-    const studentId = localStorage.getItem('studentId') || '3';
-    const currentStudentId = parseInt(studentId);
-    
-    // Barcha o'quvchilarning umumiy XP larini hisoblaymiz
-    const studentsWithTotalXP = students.map(student => {
-      let totalXP = 0;
+    for (const monthKey of Object.keys(this.student.months)) {
+      const monthData = this.student.months[monthKey];
+      const monthInfo = this.monthDetails[monthKey];
       
-      // Har bir o'quvchining barcha oylaridagi XP ni hisoblaymiz
-      for (const monthKey of Object.keys(student.months)) {
-        const monthData = student.months[monthKey];
-        totalXP += monthData.davomat;
-        totalXP += monthData.uy_vazifa;
-        totalXP += monthData.tasks;
-        totalXP -= monthData.jarima;
+      if (monthInfo) {
+        // Har 10 ball 1 darsga teng
+        const attendedLessons = Math.floor(monthData.davomat / 10);
+        totalAttendedLessons += Math.min(attendedLessons, monthInfo.totalLessons);
+        totalPossibleLessons += monthInfo.totalLessons;
       }
-      
-      return {
-        id: student.id,
-        name: student.name,
-        totalXP: totalXP
-      };
-    });
+    }
     
-    // O'quvchilarni XP bo'yicha kamayish tartibida saralaymiz
-    studentsWithTotalXP.sort((a, b) => b.totalXP - a.totalXP);
+    if (totalPossibleLessons === 0) return 0;
     
-    // Joriy o'quvchining o'rnini topamiz
-    const currentStudentIndex = studentsWithTotalXP.findIndex(student => student.id === currentStudentId);
-    
-    // Index 0-based, shuning uchun +1 qilamiz
-    return currentStudentIndex !== -1 ? currentStudentIndex + 1 : studentsWithTotalXP.length + 1;
-    
-  } catch (error) {
-    console.error('Error calculating rank position:', error);
-    return 5; // Fallback qiymat
+    const percentage = (totalAttendedLessons / totalPossibleLessons) * 100;
+    return Math.min(Math.round(percentage), 100);
   }
-}
+
+  // Umumiy uy vazifa foizini hisoblash
+  getTotalHomeworkPercentage(): number {
+    if (!this.student || !this.student.months) return 0;
+    
+    let totalHomeworkScore = 0;
+    let totalMaxHomeworkScore = 0;
+    
+    for (const monthKey of Object.keys(this.student.months)) {
+      const monthData = this.student.months[monthKey];
+      const monthInfo = this.monthDetails[monthKey];
+      
+      if (monthInfo) {
+        totalHomeworkScore += monthData.uy_vazifa;
+        // Har bir uy vazifasi 10 ballik
+        totalMaxHomeworkScore += monthInfo.homeworkLessons * 10;
+      }
+    }
+    
+    if (totalMaxHomeworkScore === 0) return 0;
+    
+    const percentage = (totalHomeworkScore / totalMaxHomeworkScore) * 100;
+    return Math.min(Math.round(percentage), 100);
+  }
+
+  // Umumiy uy vazifa o'rtacha bahosini hisoblash (10 ballik tizimda)
+  getAverageHomeworkScore(): number {
+    if (!this.student || !this.student.months) return 0;
+    
+    let totalHomeworkScore = 0;
+    let totalHomeworkCount = 0;
+    
+    for (const monthKey of Object.keys(this.student.months)) {
+      const monthData = this.student.months[monthKey];
+      const monthInfo = this.monthDetails[monthKey];
+      
+      if (monthInfo && monthInfo.homeworkLessons > 0) {
+        // O'rtacha bahoni hisoblash
+        const averageScore = monthData.uy_vazifa / monthInfo.homeworkLessons;
+        totalHomeworkScore += averageScore;
+        totalHomeworkCount++;
+      }
+    }
+    
+    if (totalHomeworkCount === 0) return 0;
+    
+    return Math.round((totalHomeworkScore / totalHomeworkCount) * 10) / 10; // 1 xona aniqlikda
+  }
+
+  // Reytingdagi o'rinni hisoblash (barcha o'quvchilar orasida)
+  getRankPosition(): number {
+    try {
+      const students: Student[] = (studentsData as any).default || studentsData;
+      const studentId = localStorage.getItem('studentId') || '3';
+      const currentStudentId = parseInt(studentId);
+      
+      // Barcha o'quvchilarning umumiy XP larini hisoblaymiz
+      const studentsWithTotalXP = students.map(student => {
+        const totalXP = this.calculateStudentTotalXP(student);
+        
+        return {
+          id: student.id,
+          name: student.name,
+          totalXP: totalXP
+        };
+      });
+      
+      // O'quvchilarni XP bo'yicha kamayish tartibida saralaymiz
+      studentsWithTotalXP.sort((a, b) => b.totalXP - a.totalXP);
+      
+      // Joriy o'quvchining o'rnini topamiz
+      const currentStudentIndex = studentsWithTotalXP.findIndex(student => student.id === currentStudentId);
+      
+      // Index 0-based, shuning uchun +1 qilamiz
+      return currentStudentIndex !== -1 ? currentStudentIndex + 1 : studentsWithTotalXP.length + 1;
+      
+    } catch (error) {
+      console.error('Error calculating rank position:', error);
+      return 5; // Fallback qiymat
+    }
+  }
 
   // Joriy oy uchun davomat ballini hisoblash
   getCurrentMonthAttendanceScore(): number {
@@ -342,7 +343,7 @@ getRankPosition(): number {
     return monthData.davomat; // Davomat ballari = XP
   }
 
-    // Joriy oy uchun qatnashgan darslar sonini hisoblash
+  // Joriy oy uchun qatnashgan darslar sonini hisoblash
   getCurrentMonthAttendedLessons(): number {
     const monthData = this.getMonthData(this.currentMonth);
     return Math.floor(monthData.davomat / 10); // Har 10 ball 1 darsga teng
@@ -404,8 +405,7 @@ getRankPosition(): number {
     return this.levels[0];
   }
 
-
-    // BUTUN DAVR - Barcha oylar hisoblansin
+  // BUTUN DAVR - Barcha oylar hisoblansin
   getTotalAttendanceXP(): number {
     if (!this.student || !this.student.months) return 0;
     
@@ -416,6 +416,7 @@ getRankPosition(): number {
     }
     return totalXP;
   }
+
   getTotalHomeworkXP(): number {
     if (!this.student || !this.student.months) return 0;
     
@@ -426,6 +427,7 @@ getRankPosition(): number {
     }
     return totalXP;
   }
+
   getTotalTasksXP(): number {
     if (!this.student || !this.student.months) return 0;
     
@@ -436,6 +438,7 @@ getRankPosition(): number {
     }
     return totalTasks;
   }
+
   getTotalPenaltyXP(): number {
     if (!this.student || !this.student.months) return 0;
     
@@ -447,11 +450,10 @@ getRankPosition(): number {
     return totalPenalty;
   }
 
-
   // O'quvchining voz kechgan oylarini olish
   getExcludedMonths(): string[] {
     if (!this.student) return [];
-    return this.excludedMonths[this.student.id] || [];
+    return this.student.excludedMonths || [];
   }
 
   // Voz kechilgan oylardagi jami XP
@@ -470,7 +472,8 @@ getRankPosition(): number {
     
     return totalExcludedXP;
   }
-    // ========== HTML UCHUN YANGI METHODLAR ==========
+
+  // ========== HTML UCHUN YANGI METHODLAR ==========
 
   // Voz kechilgan oylar ro'yxatini formatlangan ko'rinishda olish
   getFormattedExcludedMonths(): string {
@@ -498,6 +501,7 @@ getRankPosition(): number {
     
     return totalAllMonths - excludedXP;
   }
+
   // Umumiy davomat XP (faqat hisobga olingan oylar)
   getAttendanceXP(): number {
     if (!this.student || !this.student.months) return 0;
@@ -588,81 +592,158 @@ getRankPosition(): number {
     return this.getCurrentLevel().xp;
   }
 
-
-// Berilgan oy uchun darajani aniqlash
-getMonthLevel(monthKey: string): Level {
-  const monthXP = this.calculateMonthTotal(monthKey);
-  
-  // Eng yuqori darajani topish
-  for (let i = this.levels.length - 1; i >= 0; i--) {
-    if (monthXP >= this.levels[i].xp) {
-      return this.levels[i];
+  // Berilgan oy uchun darajani aniqlash
+  getMonthLevel(monthKey: string): Level {
+    const monthXP = this.calculateMonthTotal(monthKey);
+    
+    // Eng yuqori darajani topish
+    for (let i = this.levels.length - 1; i >= 0; i--) {
+      if (monthXP >= this.levels[i].xp) {
+        return this.levels[i];
+      }
     }
+    
+    return this.levels[0]; // Eng past daraja
   }
-  
-  return this.levels[0]; // Eng past daraja
-}
 
-// Berilgan oy uchun qatnashgan darslar sonini hisoblash
-getMonthAttendedLessons(monthKey: string): number {
-  const monthData = this.getMonthData(monthKey);
-  return Math.floor(monthData.davomat / 10); // Har 10 ball 1 darsga teng
-}
-
-// Berilgan oy uchun jami darslar sonini olish
-getMonthTotalLessons(monthKey: string): number {
-  const monthInfo = this.monthDetails[monthKey];
-  return monthInfo ? monthInfo.totalLessons : 0;
-}
-
-// Berilgan oy uchun davomat foizini hisoblash
-getMonthAttendancePercentage(monthKey: string): number {
-  const attendedLessons = this.getMonthAttendedLessons(monthKey);
-  const totalLessons = this.getMonthTotalLessons(monthKey);
-  
-  if (totalLessons === 0) return 0;
-  
-  const percentage = (attendedLessons / totalLessons) * 100;
-  return Math.min(Math.round(percentage), 100);
-}
-
-// Berilgan oy uchun maksimal uy vazifa ballini hisoblash
-getMonthMaxHomeworkScore(monthKey: string): number {
-  const monthInfo = this.monthDetails[monthKey];
-  return monthInfo ? monthInfo.homeworkLessons * 10 : 0; // Har biri 10 ballik
-}
-
-// Berilgan oy uchun uy vazifa foizini hisoblash
-getMonthHomeworkPercentage(monthKey: string): number {
-  const monthData = this.getMonthData(monthKey);
-  const maxScore = this.getMonthMaxHomeworkScore(monthKey);
-  
-  if (maxScore === 0) return 0;
-  
-  const percentage = (monthData.uy_vazifa / maxScore) * 100;
-  return Math.min(Math.round(percentage), 100);
-}
-// profile.component.ts
-
-// profile.component.ts
-formatMonthDisplay(monthKey: string): string {
-  const [year, month] = monthKey.split('M');
-  const monthNames = [
-    'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
-    'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'
-  ];
-  
-  const monthIndex = parseInt(month, 10) - 1;
-  if (monthIndex >= 0 && monthIndex < 12) {
-    return `${monthNames[monthIndex]} ${year}`;
+  // Berilgan oy uchun qatnashgan darslar sonini hisoblash
+  getMonthAttendedLessons(monthKey: string): number {
+    const monthData = this.getMonthData(monthKey);
+    return Math.floor(monthData.davomat / 10); // Har 10 ball 1 darsga teng
   }
-  
-  return monthKey;
-}
-// Berilgan oy uchun jami XP ni hisoblash
-// calculateMonthTotal(monthKey: string): number {
-//   const monthData = this.getMonthData(monthKey);
-//   return monthData.davomat + monthData.uy_vazifa + monthData.tasks - monthData.jarima;
-// }
-}
 
+  // Berilgan oy uchun jami darslar sonini olish
+  getMonthTotalLessons(monthKey: string): number {
+    const monthInfo = this.monthDetails[monthKey];
+    return monthInfo ? monthInfo.totalLessons : 0;
+  }
+
+  // Berilgan oy uchun davomat foizini hisoblash
+  getMonthAttendancePercentage(monthKey: string): number {
+    const attendedLessons = this.getMonthAttendedLessons(monthKey);
+    const totalLessons = this.getMonthTotalLessons(monthKey);
+    
+    if (totalLessons === 0) return 0;
+    
+    const percentage = (attendedLessons / totalLessons) * 100;
+    return Math.min(Math.round(percentage), 100);
+  }
+
+  // Berilgan oy uchun maksimal uy vazifa ballini hisoblash
+  getMonthMaxHomeworkScore(monthKey: string): number {
+    const monthInfo = this.monthDetails[monthKey];
+    return monthInfo ? monthInfo.homeworkLessons * 10 : 0; // Har biri 10 ballik
+  }
+
+  // Berilgan oy uchun uy vazifa foizini hisoblash
+  getMonthHomeworkPercentage(monthKey: string): number {
+    const monthData = this.getMonthData(monthKey);
+    const maxScore = this.getMonthMaxHomeworkScore(monthKey);
+    
+    if (maxScore === 0) return 0;
+    
+    const percentage = (monthData.uy_vazifa / maxScore) * 100;
+    return Math.min(Math.round(percentage), 100);
+  }
+
+  // profile.component.ts
+  formatMonthDisplay(monthKey: string): string {
+    const [year, month] = monthKey.split('M');
+    const monthNames = [
+      'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
+      'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'
+    ];
+    
+    const monthIndex = parseInt(month, 10) - 1;
+    if (monthIndex >= 0 && monthIndex < 12) {
+      return `${monthNames[monthIndex]} ${year}`;
+    }
+    
+    return monthKey;
+  }
+
+  // ========== YANGI METHODLAR ==========
+
+  // O'quvchining joriy XP sini olish
+  getCurrentXP(): number {
+    return this.calculateTotalXP();
+  }
+
+  // Convert qilish mumkin bo'lgan XP ni hisoblash
+  getConvertibleXP(): number {
+    const currentXP = this.getCurrentXP();
+    const legendThreshold = 1000;
+    
+    if (currentXP < legendThreshold) return 0;
+    
+    return currentXP - legendThreshold - (this.student?.convertedXP || 0);
+  }
+
+  // Tanga olish uchun link generatsiya qilish
+  generateConvertLink(xpAmount: number): string {
+    if (!this.student) return '';
+    const baseUrl = 'https://t.me/your_bot';
+    return `${baseUrl}?start=convert_${this.student.id}_${xpAmount}`;
+  }
+
+  // Sotib olish uchun link generatsiya qilish
+  generatePurchaseLink(itemId: number, quantity: number = 1): string {
+    if (!this.student) return '';
+    const baseUrl = 'https://t.me/your_bot';
+    return `${baseUrl}?start=purchase_${this.student.id}_${itemId}_${quantity}`;
+  }
+
+  // Equip uchun link generatsiya qilish
+  generateEquipLink(itemId: number): string {
+    if (!this.student) return '';
+    const baseUrl = 'https://t.me/your_bot';
+    return `${baseUrl}?start=equip_${this.student.id}_${itemId}`;
+  }
+
+  // O'quvchining equipped mahsulotlarini olish
+  getEquippedItems(): StudentItem[] {
+    if (!this.student) return [];
+    return this.student.inventory.filter(item => item.equipped);
+  }
+
+  // Mahsulotning to'liq ma'lumotini olish
+  getShopItem(itemId: number): ShopItem | undefined {
+    return this.shopItems.find(item => item.id === itemId);
+  }
+
+  // O'quvchining tanga balansini tekshirish
+  canAfford(price: number): boolean {
+    return (this.student?.coins || 0) >= price;
+  }
+
+  // Boshqa o'quvchining umumiy XP sini hisoblash (ranking uchun)
+  private calculateStudentTotalXP(student: Student): number {
+    const includedMonths = this.getStudentIncludedMonths(student);
+    return includedMonths.reduce((sum, monthKey) => {
+      const monthData = student.months[monthKey];
+      return sum + (monthData.davomat + monthData.uy_vazifa + monthData.tasks - (monthData.jarima || 0));
+    }, 0);
+  }
+
+  // Boshqa o'quvchining hisobga olingan oylarini olish
+  private getStudentIncludedMonths(student: Student): string[] {
+    const allMonths = Object.keys(student.months);
+    const excludedMonths = student.excludedMonths || [];
+    return allMonths.filter(month => !excludedMonths.includes(month));
+  }
+
+  // O'quvchining tanga balansi
+  getCoins(): number {
+    return this.student?.coins || 0;
+  }
+
+  // Convert qilingan XP
+  getConvertedXP(): number {
+    return this.student?.convertedXP || 0;
+  }
+
+  // Inventory dagi mahsulotlar soni
+  getInventoryCount(): number {
+    return this.student?.inventory.length || 0;
+  }
+}

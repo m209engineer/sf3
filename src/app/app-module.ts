@@ -12,6 +12,7 @@ import { Profile } from './Pages/system/profile/profile';
 import { Navbar } from './Pages/system/navbar/navbar';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Market } from './Pages/system/market/market';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { RouterModule } from '@angular/router';
     Home,
     Rating,
     Profile,
-    Navbar
+    Navbar,
+    Market
   ],
   imports: [
     BrowserModule,
