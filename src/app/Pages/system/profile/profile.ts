@@ -1,7 +1,7 @@
 // profile.component.ts
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as studentsData from '../../../students.json';
-import * as shopItemsData from '../../../shopItems.json';
+import * as shopItemsData from '../../../shopitems.json';
 
 interface MonthData {
   davomat: number;

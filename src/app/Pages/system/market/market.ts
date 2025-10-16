@@ -1,7 +1,7 @@
 // market.component.ts
 import { Component, OnInit, HostListener, ElementRef, Renderer2 } from '@angular/core';
 import * as studentsData from '../../../students.json';
-import * as shopItemsData from '../../../shopItems.json';
+import * as shopItemsData from '../../../shopitems.json';
 
 interface MonthData {
   davomat: number;
