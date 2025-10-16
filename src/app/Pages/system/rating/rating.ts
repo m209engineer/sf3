@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as studentsData from '../../../students.json';
-import * as shopItemsData from '../../../shopitems.json';
+import * as shopitemsData from '../../../shopitems.json';
 
 interface MonthData {
   davomat: number;
@@ -57,7 +57,7 @@ interface ShopItem {
 })
 export class Rating implements OnInit {
   students: Student[] = (studentsData as any).default || studentsData;
-  shopItems: ShopItem[] = (shopItemsData as any).default || shopItemsData;
+  shopItems: ShopItem[] = (shopitemsData as any).default || shopitemsData;
   ranking: RankingItem[] = [];
   currentStudent: Student | null = null;
   selectedSort: string = 'total';
