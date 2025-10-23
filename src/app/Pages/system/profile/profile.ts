@@ -1,7 +1,6 @@
 // profile.component.ts
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as studentsData from '../../../students.json';
-import * as shopItemsData from '../../../shopitems.json';
 
 interface MonthData {
   davomat: number;
@@ -57,7 +56,7 @@ interface Level {
 })
 export class Profile implements OnInit {
   student: Student | null = null;
-  shopItems: ShopItem[] = (shopItemsData as any).default || shopItemsData;
+  shopItems: ShopItem[] = [];
   showLogoutButton = false;
 
   levels: Level[] = [
