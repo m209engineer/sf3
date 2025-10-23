@@ -1,44 +1,23 @@
-{
-  "items": [
-    {
-      "id": 1,
-      "name": "Oltin Nisha",
-      "description": "Profil uchun eksklyuziv nisha",
-      "price": 50,
-      "category": "badge",
-      "image": "gold-badge.png",
-      "rarity": "rare",
-      "available": true
-    },
-    {
-      "id": 2,
-      "name": "shakar Mavzu",
-      "description": "Profil va interfeys uchun qora mavzu",
-      "price": 100,
-      "category": "theme",
-      "image": "dark-theme.png",
-      "rarity": "epic",
-      "available": true
-    },
-    {
-      "id": 3,
-      "name": "Maxsus Avatar",
-      "description": "Limitlangan nashr avatar",
-      "price": 200,
-      "category": "special",
-      "image": "special-avatar.png",
-      "rarity": "legendary",
-      "available": true
-    },
-    {
-      "id": 4,
-      "name": "XP Koeffitsienti",
-      "description": "1 oy davomida XP to'plash +10%",
-      "price": 150,
-      "category": "utility",
-      "image": "xp-boost.png",
-      "rarity": "epic",
-      "available": true
-    }
-  ]
-}
+
+[
+  {
+    "id": 1,
+    "name": "Oltin Nisha",
+    "description": "Profil uchun eksklyuziv nisha",
+    "price": 50,
+    "category": "badge",
+    "image": "gold-badge.png",
+    "rarity": "rare",
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "shakar Mavzu",
+    "description": "Profil va interfeys uchun qora mavzu",
+    "price": 100,
+    "category": "theme",
+    "image": "dark-theme.png",
+    "rarity": "epic",
+    "available": true
+  }
+]
