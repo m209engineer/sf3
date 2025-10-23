@@ -6,7 +6,7 @@ import { AuthGuard } from './Guards/auth.guard';
 import { Home } from './Pages/system/home/home';
 import { Rating } from './Pages/system/rating/rating';
 import { Profile } from './Pages/system/profile/profile';
-import { Market } from './Pages/system/market/market';
+
 
 
 
@@ -21,7 +21,7 @@ const routes: Routes = [
       { path: 'home', component: Home },
       { path: 'rating', component: Rating },
       { path: 'profile', component: Profile },
-      {path: 'market', component: Market},
+
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
