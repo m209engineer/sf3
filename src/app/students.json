@@ -12,7 +12,7 @@
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 83, "jarima": 57 },
       "2025-09": { "davomat": 130, "uy_vazifa": 45, "tasks": 892, "jarima": 1018 },
-      "2025-10": { "davomat": 60, "uy_vazifa": 0, "tasks": 115, "jarima": 895 }
+      "2025-10": { "davomat": 80, "uy_vazifa": 10, "tasks": 315, "jarima": 1095 }
     },
     "inventory": []
   },
@@ -29,7 +29,7 @@
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 68, "jarima": 53 },
       "2025-09": { "davomat": 100, "uy_vazifa": 70, "tasks": 786, "jarima": 768 },
-      "2025-10": { "davomat": 70, "uy_vazifa": 50, "tasks": 597, "jarima": 430 }
+      "2025-10": { "davomat": 110, "uy_vazifa": 80, "tasks": 1197, "jarima": 485 }
     },
     "inventory": []
   },
@@ -46,7 +46,7 @@
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 78, "jarima": 78 },
       "2025-09": { "davomat": 140, "uy_vazifa": 45, "tasks": 706, "jarima": 638 },
-      "2025-10": { "davomat": 70, "uy_vazifa": 50, "tasks": 412, "jarima": 535 }
+      "2025-10": { "davomat": 90, "uy_vazifa": 60, "tasks": 862, "jarima": 635 }
     },
     "inventory": []
   },
@@ -63,7 +63,7 @@
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 80, "jarima": 38 },
       "2025-09": { "davomat": 120, "uy_vazifa": 45, "tasks": 879, "jarima": 523 },
-      "2025-10": { "davomat": 80, "uy_vazifa": 50, "tasks": 847, "jarima": 400 }
+      "2025-10": { "davomat": 100, "uy_vazifa": 70, "tasks": 997, "jarima": 570 }
     },
     "inventory": []
   },
@@ -97,7 +97,7 @@
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 101, "jarima": 56 },
       "2025-09": { "davomat": 70, "uy_vazifa": 20, "tasks": 727, "jarima": 598 },
-      "2025-10": { "davomat": 50, "uy_vazifa": 10, "tasks": 187, "jarima": 835 }
+      "2025-10": { "davomat": 50, "uy_vazifa": 10, "tasks": 187, "jarima": 105 }
     },
     "inventory": []
   },
@@ -114,7 +114,7 @@
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 82, "jarima": 46 },
       "2025-09": { "davomat": 120, "uy_vazifa": 65, "tasks": 806, "jarima": 678 },
-      "2025-10": { "davomat": 80, "uy_vazifa": 40, "tasks": 682, "jarima": 1055 }
+      "2025-10": { "davomat": 120, "uy_vazifa": 60, "tasks": 957, "jarima": 1215 }
     },
     "inventory": []
   },
@@ -131,7 +131,7 @@
     "months": {
       "2025-08": { "davomat": 6, "uy_vazifa": 0, "tasks": 68, "jarima": 29 },
       "2025-09": { "davomat": 150, "uy_vazifa": 40, "tasks": 663, "jarima": 688 },
-      "2025-10": { "davomat": 50, "uy_vazifa": 10, "tasks": 145, "jarima": 900 }
+      "2025-10": { "davomat": 90, "uy_vazifa": 20, "tasks": 700, "jarima": 1020 }
     },
     "inventory": []
   }
